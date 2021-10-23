@@ -10,5 +10,4 @@ public class HelloWorldController {
     public String getMessage() {
         return "Hello FHIR!";
     }
-
 }
