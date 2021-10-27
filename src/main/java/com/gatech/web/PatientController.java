@@ -1,6 +1,8 @@
 package com.gatech.web;
 
+import com.gatech.services.ImpGuideParser;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,11 +21,17 @@ public class PatientController {
      * @return
      */
     @GetMapping("/patients")
-    public JSONObject getAllPatients() {
+    public static JSONObject getAllPatients() {
+        Object object;
         try {
+            ImpGuideParser impGuideParser = new ImpGuideParser();
             JSONParser parser = new JSONParser();
             JSONObject data = (JSONObject) parser.parse(
-                    new FileReader("src/main/java/com/gatech/data/Aaron697_Brekke496_2fa15bc7-8866-461a-9000-f739e425860a.json"));
+                    new FileReader("./../src/main/java/com/gatech/impGuide/us-core.json"));
+            JSONObject snapshot = (JSONObject) data.get("snapshot");
+            JSONArray element = (JSONArray) snapshot.get("element");
+            impGuideParser.findMustSupport(element);
+            impGuideParser.findMustHave(element);
             return data;
         } catch (IOException | ParseException e) {
             e.printStackTrace();

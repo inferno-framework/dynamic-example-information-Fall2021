@@ -1,7 +1,10 @@
 package com.gatech.services;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
+import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -16,14 +19,38 @@ public class ImpGuideParser {
 
     // TODO: List out mustSupport and mustHave element from JSON
     public List<String> findMustSupport(JSONArray impGuideJson) {
+        List<String> mustSupport = new ArrayList<>();
 
-        return null;
+        for (Object slide : impGuideJson) {
+
+            JSONObject jsonObject2 = (JSONObject) slide;
+            String id = (String) jsonObject2.get("id");
+            Boolean mustSupportValue = (Boolean) jsonObject2.get("mustSupport");
+
+            if(mustSupportValue != null && mustSupportValue){
+                mustSupport.add(id);
+            }
+        }
+        System.out.println("Must Support Elements are " + mustSupport);
+        return mustSupport;
     }
 
     // TODO: List out mustHave element
     public List<String> findMustHave(JSONArray impGuideJson) {
+        List<String> mustHave = new ArrayList<>();
 
-        return null;
+        for (Object slide : impGuideJson) {
+
+            JSONObject jsonObject2 = (JSONObject) slide;
+            String id = (String) jsonObject2.get("id");
+            Boolean mustHaveValue = (Boolean) jsonObject2.get("mustHave");
+
+            if(mustHaveValue != null && mustHaveValue){
+                mustHave.add(id);
+            }
+        }
+        System.out.println("Must Have Elements are " + mustHave);
+        return mustHave;
     }
 
     // TODO: Check for the "code" datatype, and list out all the supported values from the resources it is binded to
