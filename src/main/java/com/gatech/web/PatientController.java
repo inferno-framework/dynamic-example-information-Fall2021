@@ -27,11 +27,13 @@ public class PatientController {
             ImpGuideParser impGuideParser = new ImpGuideParser();
             JSONParser parser = new JSONParser();
             JSONObject data = (JSONObject) parser.parse(
-                    new FileReader("./../src/main/java/com/gatech/impGuide/us-core.json"));
+                    new FileReader("src/main/java/com/gatech/impGuide/us-core.json"));
             JSONObject snapshot = (JSONObject) data.get("snapshot");
             JSONArray element = (JSONArray) snapshot.get("element");
             impGuideParser.findMustSupport(element);
             impGuideParser.findMustHave(element);
+            impGuideParser.findValuesInCode("time");
+            impGuideParser.findResourceType(data);
             return data;
         } catch (IOException | ParseException e) {
             e.printStackTrace();

@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 public class FHIRApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(FHIRApplication.class, args);
+        //SpringApplication.run(FHIRApplication.class, args);
         PatientController.getAllPatients();
     }
 

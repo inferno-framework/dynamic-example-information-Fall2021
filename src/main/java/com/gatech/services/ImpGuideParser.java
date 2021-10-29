@@ -2,8 +2,15 @@ package com.gatech.services;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
+
+import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,15 +61,21 @@ public class ImpGuideParser {
     }
 
     // TODO: Check for the "code" datatype, and list out all the supported values from the resources it is binded to
-    public List<String> findValuesInCode(String attribute){
-        return null;
+    public String findValuesInCode(String attribute) throws IOException {
+        File input = new File("src/main/java/com/gatech/datatypes/hl7.org_fhir_R4_datatypes.html");
+        Document doc = Jsoup.parse(input, "UTF-8", "http://hl7.org/fhir/R4/datatypes.html");
+        Element masthead = doc.select("#"+attribute).first();
+        System.out.println("Regex: "+masthead.text());
+        return masthead.text();
     }
 
     // TODO: Find which resource does the implementation guide
     // NOTES: This can be found using  "kind" value and under the snapshot block.
     // This resource will be used to dynamically create the API and render the data
-    public String findResourceType(JSONArray impGuideJson) {
-        return null;
+    public String findResourceType(JSONObject impGuideJson) {
+        String kind = (String) impGuideJson.get("kind");
+        System.out.println("kind value is " + kind);
+        return kind;
     }
 
 }
