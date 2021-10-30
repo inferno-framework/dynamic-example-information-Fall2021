@@ -32,7 +32,7 @@ public class PatientController {
             JSONArray element = (JSONArray) snapshot.get("element");
             impGuideParser.findMustSupport(element);
             impGuideParser.findMustHave(element);
-            impGuideParser.findValuesInCode("time");
+            impGuideParser.findValuesInCode("Patient.address.state");
             impGuideParser.findResourceType(data);
             return data;
         } catch (IOException | ParseException e) {
