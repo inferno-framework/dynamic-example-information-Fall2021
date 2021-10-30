@@ -77,23 +77,24 @@ public class ImpGuideParser {
         JSONObject impGuideJson = readImplementationGuide("src/main/java/com/gatech/impGuide/us-core.json");
         JSONObject snapshot = (JSONObject) impGuideJson.get("snapshot");
         JSONArray element = (JSONArray) snapshot.get("element");
-        for (Object slide : element) {
 
+        for (Object slide : element) {
             JSONObject jsonObject2 = (JSONObject) slide;
             String id = (String) jsonObject2.get("id");
+
             if (id.equals(attribute) && jsonObject2.containsKey("binding")) {
                 JSONObject jsonObject3 = (JSONObject) jsonObject2.get("binding");
                 String valueset_link = (String) jsonObject3.get("valueSet");
-
-
+                valueset.add(valueset_link);
+                //grab table content from the link
                 Document doc = Jsoup.connect(valueset_link).get();
                 Element masthead = doc.select(".codes").first();
 
-                valueset.add(valueset_link);
-                if (masthead!=null) {
-                    List<String> values= List.of(masthead.text().split(" "));
+                if (masthead != null) {
+                    List<String> values = List.of(masthead.text().split(" "));
                     valueset.addAll(values);
                 }
+
                 System.out.println(valueset);
                 return valueset;
             }
