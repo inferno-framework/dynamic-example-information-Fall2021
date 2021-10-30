@@ -73,7 +73,7 @@ public class ImpGuideParser {
 
     // TODO: Check for the "code" datatype, and list out all the supported values from the resources it is binded to
     public List<String> findValuesInCode(String attribute) throws IOException {
-        List<String> values = new ArrayList<>();
+        List<String> valueset = new ArrayList<>();
         JSONObject impGuideJson = readImplementationGuide("src/main/java/com/gatech/impGuide/us-core.json");
         JSONObject snapshot = (JSONObject) impGuideJson.get("snapshot");
         JSONArray element = (JSONArray) snapshot.get("element");
@@ -83,18 +83,19 @@ public class ImpGuideParser {
             String id = (String) jsonObject2.get("id");
             if (id.equals(attribute) && jsonObject2.containsKey("binding")) {
                 JSONObject jsonObject3 = (JSONObject) jsonObject2.get("binding");
-                String valueset = (String) jsonObject3.get("valueSet");
+                String valueset_link = (String) jsonObject3.get("valueSet");
 
 
-                Document doc = Jsoup.connect(valueset).get();
+                Document doc = Jsoup.connect(valueset_link).get();
                 Element masthead = doc.select(".codes").first();
 
-                values.add(valueset);
+                valueset.add(valueset_link);
                 if (masthead!=null) {
-                    values.add(masthead.text());
+                    List<String> values= List.of(masthead.text().split(" "));
+                    valueset.addAll(values);
                 }
-                System.out.println(values);
-                return values;
+                System.out.println(valueset);
+                return valueset;
             }
         }
 
