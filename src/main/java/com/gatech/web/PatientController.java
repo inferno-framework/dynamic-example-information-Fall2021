@@ -1,6 +1,6 @@
 package com.gatech.web;
 
-import com.gatech.services.ImpGuideParser;
+import com.gatech.services.parser.ImplementationGuide;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
@@ -24,16 +24,16 @@ public class PatientController {
     public static JSONObject getAllPatients() {
         Object object;
         try {
-            ImpGuideParser impGuideParser = new ImpGuideParser();
+            ImplementationGuide implementationGuide = new ImplementationGuide();
             JSONParser parser = new JSONParser();
             JSONObject data = (JSONObject) parser.parse(
                     new FileReader("src/main/java/com/gatech/impGuide/us-core.json"));
             JSONObject snapshot = (JSONObject) data.get("snapshot");
             JSONArray element = (JSONArray) snapshot.get("element");
-            impGuideParser.findMustSupport(element);
-            impGuideParser.findMustHave(element);
-            impGuideParser.findValuesInCode("Patient.address.state");
-            impGuideParser.findResourceType(data);
+            implementationGuide.findMustSupport(element);
+            implementationGuide.findMustHave(element);
+            implementationGuide.findValuesInCode("Patient.address.state");
+            implementationGuide.findResourceType(data);
             return data;
         } catch (IOException | ParseException e) {
             e.printStackTrace();
