@@ -26,3 +26,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  Synthea:
+    image: smartonfhir/synthea
+    ports:
+      - "8000:80"

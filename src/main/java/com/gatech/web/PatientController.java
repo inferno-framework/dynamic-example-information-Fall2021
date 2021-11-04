@@ -1,6 +1,7 @@
 package com.gatech.web;
 
 import com.gatech.services.ImpGuideParser;
+import com.gatech.services.SyntheaRecordFetch;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
@@ -25,6 +26,7 @@ public class PatientController {
         Object object;
         try {
             ImpGuideParser impGuideParser = new ImpGuideParser();
+            SyntheaRecordFetch syntheaRecordFetch = new SyntheaRecordFetch();
             JSONParser parser = new JSONParser();
             JSONObject data = (JSONObject) parser.parse(
                     new FileReader("src/main/java/com/gatech/impGuide/us-core.json"));
@@ -34,6 +36,7 @@ public class PatientController {
             impGuideParser.findMustHave(element);
             impGuideParser.findValuesInCode("time");
             impGuideParser.findResourceType(data);
+            syntheaRecordFetch.fetchPatients();
             return data;
         } catch (IOException | ParseException e) {
             e.printStackTrace();
