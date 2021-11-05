@@ -71,7 +71,7 @@ public class ImplementationGuide {
     // TODO: Check for the "code" datatype, and list out all the supported values from the resources it is binded to
     public List<String> findValuesInCode(String attribute) throws IOException {
         List<String> valueset = new ArrayList<>();
-        JSONObject impGuideJson = readImplementationGuide("src/main/java/com/gatech/data/implementationGuide/us-core.json");
+        JSONObject impGuideJson = readImplementationGuide("src/main/java/com/gatech/data/implementationGuide/us-core-patient.json");
         JSONObject snapshot = (JSONObject) impGuideJson.get("snapshot");
         JSONArray element = (JSONArray) snapshot.get("element");
 

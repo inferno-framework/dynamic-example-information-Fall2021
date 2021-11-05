@@ -1,6 +1,8 @@
 package com.gatech;
 
+import com.gatech.services.parser.Synthea;
 import com.gatech.testing.ImplementationGuideTest;
+import com.gatech.testing.SyntheaTest;
 import org.json.simple.parser.ParseException;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -15,6 +17,9 @@ public class FHIRApplication {
 
         ImplementationGuideTest testImpGuide = new ImplementationGuideTest();
         testImpGuide.testFunctionality();
+
+        Synthea syntheaTest = new Synthea();
+        syntheaTest.findAttributeOnSynthea();
     }
 
 }

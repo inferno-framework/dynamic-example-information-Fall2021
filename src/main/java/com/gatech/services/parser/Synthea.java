@@ -28,7 +28,7 @@ public class Synthea {
     public List<String> findAttributeOnSynthea() {
         JSONParser parser = new JSONParser();
         try {
-            Object obj = parser.parse(new FileReader("src/main/java/com/gatech/data/Aaron697_Brekke496_2fa15bc7-8866-461a-9000-f739e425860a.json"));
+            Object obj = parser.parse(new FileReader("src/main/java/com/gatech/data/synthea/Aaron697_Brekke496_2fa15bc7-8866-461a-9000-f739e425860a.json"));
             JSONObject jsonObject =  (JSONObject) obj;
             List<String> resourceList = new ArrayList<>();
             // Start with retrieving the entry
