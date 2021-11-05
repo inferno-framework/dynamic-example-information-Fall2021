@@ -61,9 +61,9 @@ public class ImpGuideParser {
 
             JSONObject jsonObject2 = (JSONObject) slide;
             String id = (String) jsonObject2.get("id");
-            Boolean mustHaveValue = (Boolean) jsonObject2.get("mustHave");
+            long mustHaveValue = (long) jsonObject2.get("min");
 
-            if (mustHaveValue != null && mustHaveValue) {
+            if(mustHaveValue > 0){
                 mustHave.add(id);
             }
         }
