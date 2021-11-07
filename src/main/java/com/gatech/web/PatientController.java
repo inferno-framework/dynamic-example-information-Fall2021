@@ -1,7 +1,6 @@
 package com.gatech.web;
 
 import com.gatech.services.ImpGuideParser;
-import com.gatech.services.SyntheaRecordFetch;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;

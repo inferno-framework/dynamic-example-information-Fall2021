@@ -9,13 +9,12 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /*
     This class will sever as an implementation guide parser that will read the guide, and list out all the musthave and mustSupport attribute.
@@ -62,9 +61,9 @@ public class ImpGuideParser {
 
             JSONObject jsonObject2 = (JSONObject) slide;
             String id = (String) jsonObject2.get("id");
-            long mustHaveValue = (long) jsonObject2.get("min");
+            Boolean mustHaveValue = (Boolean) jsonObject2.get("mustHave");
 
-            if(mustHaveValue > 0){
+            if (mustHaveValue != null && mustHaveValue) {
                 mustHave.add(id);
             }
         }
@@ -74,7 +73,6 @@ public class ImpGuideParser {
 
     // TODO: Check for the "code" datatype, and list out all the supported values from the resources it is binded to
     public List<String> findValuesInCode(String attribute) throws IOException {
-
         List<String> valueset = new ArrayList<>();
         JSONObject impGuideJson = readImplementationGuide("src/main/java/com/gatech/impGuide/us-core.json");
         JSONObject snapshot = (JSONObject) impGuideJson.get("snapshot");
@@ -87,38 +85,63 @@ public class ImpGuideParser {
             if (id.equals(attribute) && jsonObject2.containsKey("binding")) {
                 JSONObject jsonObject3 = (JSONObject) jsonObject2.get("binding");
                 String valueset_link = (String) jsonObject3.get("valueSet");
-                //valueset.add(valueset_link);
+                valueset.add(valueset_link);
                 //grab table content from the link
                 Document doc = Jsoup.connect(valueset_link).get();
-                Element table = doc.select(".codes").first();
-                if (table==null){
-                    table = doc.select(".none").first();
-                }
-                if (table != null) {
-                    Element row = table.select("tr").get(2);
-                    //List<String> values = List.of(table.text().split(" "));
-                    //valueset.addAll(values);
-                    Element col=row.select("td").get(0);
-                    valueset.add(col.text());
-                }else{
-                    valueset.add("Intensional value set is not supported");
+                Element masthead = doc.select(".codes").first();
+
+                if (masthead != null) {
+                    List<String> values = List.of(masthead.text().split(" "));
+                    valueset.addAll(values);
                 }
 
                 System.out.println(valueset);
                 return valueset;
             }
         }
-        valueset.add("Intensional value set is not supported");
-        return valueset;
+
+        /*File input = new File("src/main/java/com/gatech/datatypes/hl7.org_fhir_R4_datatypes.html");
+        Document doc = Jsoup.parse(input, "UTF-8", "http://hl7.org/fhir/R4/datatypes.html");
+        Element masthead = doc.select("#"+attribute).first();
+        System.out.println("Regex: "+masthead.text());
+        return masthead.text();*/
+        return null;
     }
 
     // TODO: Find which resource does the implementation guide
     // NOTES: This can be found using  "kind" value and under the snapshot block.
     // This resource will be used to dynamically create the API and render the data
+
     public String findResourceType(JSONObject impGuideJson) {
         String kind = (String) impGuideJson.get("type");
         System.out.println("The resource is " + kind);
         return kind;
     }
 
+
+    // Parse all the attribute from implementation guide
+    public List<String> findAllElements(JSONArray impGuideJson) {
+        List<String> attributes = new ArrayList<>();
+        for (Object element : impGuideJson) {
+            JSONObject jsonObject2 = (JSONObject) element;
+            String id = (String) jsonObject2.get("id");
+
+            if (id != null) {
+                if (id.contains(".")) {
+                    String[] attrs = id.split("\\.");
+
+                    if (attrs.length == 2) {
+                        System.out.println(attrs[1]);
+                        attributes.add(attrs[1]);
+                    } else if (attrs.length == 3) {
+                        System.out.println(attrs[1] + "."  + attrs[2]);
+                        attributes.add(attrs[1] + "." + attrs[2]);
+                    } else {
+
+                    }
+                }
+            }
+        }
+        return attributes;
+    }
 }
