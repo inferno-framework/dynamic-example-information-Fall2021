@@ -9,12 +9,13 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /*
     This class will sever as an implementation guide parser that will read the guide, and list out all the musthave and mustSupport attribute.
@@ -73,6 +74,7 @@ public class ImpGuideParser {
 
     // TODO: Check for the "code" datatype, and list out all the supported values from the resources it is binded to
     public List<String> findValuesInCode(String attribute) throws IOException {
+
         List<String> valueset = new ArrayList<>();
         JSONObject impGuideJson = readImplementationGuide("src/main/java/com/gatech/impGuide/us-core.json");
         JSONObject snapshot = (JSONObject) impGuideJson.get("snapshot");
@@ -85,33 +87,34 @@ public class ImpGuideParser {
             if (id.equals(attribute) && jsonObject2.containsKey("binding")) {
                 JSONObject jsonObject3 = (JSONObject) jsonObject2.get("binding");
                 String valueset_link = (String) jsonObject3.get("valueSet");
-                valueset.add(valueset_link);
+                //valueset.add(valueset_link);
                 //grab table content from the link
                 Document doc = Jsoup.connect(valueset_link).get();
-                Element masthead = doc.select(".codes").first();
-
-                if (masthead != null) {
-                    List<String> values = List.of(masthead.text().split(" "));
-                    valueset.addAll(values);
+                Element table = doc.select(".codes").first();
+                if (table==null){
+                    table = doc.select(".none").first();
+                }
+                if (table != null) {
+                    Element row = table.select("tr").get(2);
+                    //List<String> values = List.of(table.text().split(" "));
+                    //valueset.addAll(values);
+                    Element col=row.select("td").get(0);
+                    valueset.add(col.text());
+                }else{
+                    valueset.add("Intensional value set is not supported");
                 }
 
                 System.out.println(valueset);
                 return valueset;
             }
         }
-
-        /*File input = new File("src/main/java/com/gatech/datatypes/hl7.org_fhir_R4_datatypes.html");
-        Document doc = Jsoup.parse(input, "UTF-8", "http://hl7.org/fhir/R4/datatypes.html");
-        Element masthead = doc.select("#"+attribute).first();
-        System.out.println("Regex: "+masthead.text());
-        return masthead.text();*/
-        return null;
+        valueset.add("Intensional value set is not supported");
+        return valueset;
     }
 
     // TODO: Find which resource does the implementation guide
     // NOTES: This can be found using  "kind" value and under the snapshot block.
     // This resource will be used to dynamically create the API and render the data
-
     public String findResourceType(JSONObject impGuideJson) {
         String kind = (String) impGuideJson.get("type");
         System.out.println("The resource is " + kind);
