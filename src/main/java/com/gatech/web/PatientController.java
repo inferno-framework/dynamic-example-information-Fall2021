@@ -35,6 +35,8 @@ public class PatientController {
             impGuideParser.findMustSupport(element);
             impGuideParser.findMustHave(element);
             impGuideParser.findValuesInCode("Patient.address.state");
+            impGuideParser.findValuesInCode("Patient.language");
+
             impGuideParser.findResourceType(data);
             syntheaRecordFetch.fetchPatients();
             return data;
