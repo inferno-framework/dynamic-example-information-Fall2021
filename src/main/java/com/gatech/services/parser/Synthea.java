@@ -48,44 +48,4 @@ public class Synthea {
         }
         return null;
     }
-
-    public List<String> parseIdentifier(JSONObject jsonObject) {
-        return null;
-    }
-
-    public List<String> parseCode(JSONObject jsonObject) {
-        return null;
-    }
-
-    public List<String> parseSerialNumber(JSONObject jsonObject) {
-        return null;
-    }
-
-    public List<String> parseInsurance(JSONObject jsonObject) {
-        return null;
-    }
-
-    public List<String> parsePeriod(JSONObject jsonObject) {
-        return null;
-    }
-
-    public List<String> parseLifeCycleStatus(JSONObject jsonObject) {
-        return null;
-    }
-
-    public List<String> parseComponent(JSONObject jsonObject) {
-        return null;
-    }
-
-    public List<String> parseValueCodeableConcept(JSONObject jsonObject) {
-        return null;
-    }
-
-    public List<String> parsePrimaryCourse(JSONObject jsonObject) {
-        return null;
-    }
-
-    public List<String> parseResult(JSONObject jsonObject) {
-        return null;
-    }
 }

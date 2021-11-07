@@ -19,12 +19,11 @@ import java.util.List;
 /*
     This class will sever as an implementation guide parser that will read the guide, and list out all the musthave and mustSupport attribute.
  */
-public class ImpGuideParser {
+public class ImplementationGuide {
 
     // TODO: Read implementation guide that is stored locally
     public JSONObject readImplementationGuide(String filePath) {
         try {
-            ImpGuideParser impGuideParser = new ImpGuideParser();
             JSONParser parser = new JSONParser();
             JSONObject data = (JSONObject) parser.parse(
                     new FileReader(filePath));
@@ -74,7 +73,7 @@ public class ImpGuideParser {
     // TODO: Check for the "code" datatype, and list out all the supported values from the resources it is binded to
     public List<String> findValuesInCode(String attribute) throws IOException {
         List<String> valueset = new ArrayList<>();
-        JSONObject impGuideJson = readImplementationGuide("src/main/java/com/gatech/impGuide/us-core.json");
+        JSONObject impGuideJson = readImplementationGuide("src/main/java/com/gatech/data/implementationGuide/us-core-patient.json");
         JSONObject snapshot = (JSONObject) impGuideJson.get("snapshot");
         JSONArray element = (JSONArray) snapshot.get("element");
 
@@ -99,12 +98,6 @@ public class ImpGuideParser {
                 return valueset;
             }
         }
-
-        /*File input = new File("src/main/java/com/gatech/datatypes/hl7.org_fhir_R4_datatypes.html");
-        Document doc = Jsoup.parse(input, "UTF-8", "http://hl7.org/fhir/R4/datatypes.html");
-        Element masthead = doc.select("#"+attribute).first();
-        System.out.println("Regex: "+masthead.text());
-        return masthead.text();*/
         return null;
     }
 

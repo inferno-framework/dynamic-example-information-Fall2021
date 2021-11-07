@@ -1,6 +1,6 @@
 package com.gatech.testing;
 
-import com.gatech.services.parser.ImplementationGuide;
+import com.gatech.services.ImplementationGuide;
 import org.apache.catalina.mapper.Mapper;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
