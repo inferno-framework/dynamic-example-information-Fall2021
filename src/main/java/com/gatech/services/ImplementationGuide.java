@@ -72,8 +72,9 @@ public class ImplementationGuide {
 
     // TODO: Check for the "code" datatype, and list out all the supported values from the resources it is binded to
     public List<String> findValuesInCode(String attribute) throws IOException {
+
         List<String> valueset = new ArrayList<>();
-        JSONObject impGuideJson = readImplementationGuide("src/main/java/com/gatech/data/implementationGuide/us-core-patient.json");
+        JSONObject impGuideJson = readImplementationGuide("src/main/java/com/gatech/impGuide/us-core.json");
         JSONObject snapshot = (JSONObject) impGuideJson.get("snapshot");
         JSONArray element = (JSONArray) snapshot.get("element");
 
@@ -84,22 +85,31 @@ public class ImplementationGuide {
             if (id.equals(attribute) && jsonObject2.containsKey("binding")) {
                 JSONObject jsonObject3 = (JSONObject) jsonObject2.get("binding");
                 String valueset_link = (String) jsonObject3.get("valueSet");
-                valueset.add(valueset_link);
+                //valueset.add(valueset_link);
                 //grab table content from the link
                 Document doc = Jsoup.connect(valueset_link).get();
-                Element masthead = doc.select(".codes").first();
-
-                if (masthead != null) {
-                    List<String> values = List.of(masthead.text().split(" "));
-                    valueset.addAll(values);
+                Element table = doc.select(".codes").first();
+                if (table==null){
+                    table = doc.select(".none").first();
+                }
+                if (table != null) {
+                    Element row = table.select("tr").get(2);
+                    //List<String> values = List.of(table.text().split(" "));
+                    //valueset.addAll(values);
+                    Element col=row.select("td").get(0);
+                    valueset.add(col.text());
+                }else{
+                    valueset.add("Intensional value set is not supported");
                 }
 
                 System.out.println(valueset);
                 return valueset;
             }
         }
-        return null;
+        valueset.add("Intensional value set is not supported");
+        return valueset;
     }
+
 
     // TODO: Find which resource does the implementation guide
     // NOTES: This can be found using  "kind" value and under the snapshot block.
