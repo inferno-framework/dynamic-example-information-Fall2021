@@ -1,6 +1,10 @@
 package com.gatech;
 
 import com.gatech.services.Helper;
+import com.gatech.services.parser.Synthea;
+import com.gatech.testing.ImplementationGuideTest;
+import com.gatech.web.PatientController;
+import com.gatech.testing.SyntheaTest;
 import org.json.simple.parser.ParseException;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -16,11 +20,13 @@ public class FHIRApplication {
         //ImplementationGuideTest testImpGuide = new ImplementationGuideTest();
         //testImpGuide.testFindAllAttributeInIMPGuide();
 
-//        Synthea syntheaTest = new Synthea();
-//        syntheaTest.findAttributeOnSynthea();
-
         Helper helper = new Helper();
         helper.findMissingAttributeByProfile();
+
+        Synthea syntheaTest = new Synthea();
+        syntheaTest.findAttributeOnSynthea();
+
+        PatientController.getAllPatients();
     }
 
 }

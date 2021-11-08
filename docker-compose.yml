@@ -31,3 +31,5 @@ services:
     image: smartonfhir/synthea
     ports:
       - "8000:80"
+    volumes:
+      - /var/lib/docker/volumes/synthea:/synthea/output:rw
