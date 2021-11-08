@@ -2,6 +2,7 @@ package com.gatech;
 
 import com.gatech.services.parser.Synthea;
 import com.gatech.testing.ImplementationGuideTest;
+import com.gatech.web.PatientController;
 import com.gatech.testing.SyntheaTest;
 import org.json.simple.parser.ParseException;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,6 +21,9 @@ public class FHIRApplication {
 
         Synthea syntheaTest = new Synthea();
         syntheaTest.findAttributeOnSynthea();
+
+        PatientController.getAllPatients();
+
     }
 
 }
