@@ -15,8 +15,8 @@ public class FHIRApplication {
     public static void main(String[] args) throws IOException, ParseException {
         //SpringApplication.run(FHIRApplication.class, args);
 
-        ImplementationGuideTest testImpGuide = new ImplementationGuideTest();
-        testImpGuide.testFunctionality();
+        //ImplementationGuideTest testImpGuide = new ImplementationGuideTest();
+        //testImpGuide.testFindAllAttributeInIMPGuide();
 
         Synthea syntheaTest = new Synthea();
         syntheaTest.findAttributeOnSynthea();

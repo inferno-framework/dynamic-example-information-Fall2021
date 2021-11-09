@@ -1,4 +1,4 @@
-package com.gatech.services;
+package com.gatech.services.parser;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
