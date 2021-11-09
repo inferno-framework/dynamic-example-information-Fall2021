@@ -23,7 +23,8 @@ public class ImplementationGuideTest {
         JSONArray element = (JSONArray) snapshot.get("element");
         System.out.println(implementationGuide.findMustSupport(element));
         System.out.println(implementationGuide.findMustHave(element));
-        System.out.println(implementationGuide.findValuesInCode("time"));
+        System.out.println(implementationGuide.findValuesInCode("Patient.address.state","us-core-patient.json"));
+        System.out.println(implementationGuide.findValuesInCode("Medication.language","us-core-medication.json"));
         System.out.println(implementationGuide.findResourceType(data));
 
         System.out.println(implementationGuide.findAllElements(element));
