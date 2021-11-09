@@ -7,7 +7,6 @@ public class SyntheaTest {
     public void test() {
 
         Synthea synthea = new Synthea();
-        synthea.findAttributeOnSynthea();
 
     }
 }

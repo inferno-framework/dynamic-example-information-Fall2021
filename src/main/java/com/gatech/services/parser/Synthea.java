@@ -23,7 +23,7 @@ public class Synthea {
         JSONParser parser = new JSONParser();
         try {
             // Read the JSON file. This will be changed accordingly when we read the input file from the output folder in local repo that is mapped to container using Volume
-            Object obj = parser.parse(new FileReader("src/main/java/com/gatech/data/synthea/Aaron697_Brekke496_2fa15bc7-8866-461a-9000-f739e425860a.json"));
+            Object obj = readSyntheaFile();
             JSONObject jsonObject =  (JSONObject) obj;
 
             // Fetch the entire json array from entry
@@ -45,5 +45,11 @@ public class Synthea {
             e.printStackTrace();
         }
         return profileByResource;
+    }
+
+    public Object readSyntheaFile() throws IOException, ParseException {
+        JSONParser parser = new JSONParser();
+        Object obj = parser.parse(new FileReader("src/main/java/com/gatech/data/synthea/Aaron697_Brekke496_2fa15bc7-8866-461a-9000-f739e425860a.json"));
+        return obj;
     }
 }
