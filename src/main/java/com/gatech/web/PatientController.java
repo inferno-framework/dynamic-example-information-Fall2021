@@ -29,7 +29,7 @@ public class PatientController {
             SyntheaRecordFetch syntheaRecordFetch = new SyntheaRecordFetch();
             JSONParser parser = new JSONParser();
             JSONObject data = (JSONObject) parser.parse(
-                    new FileReader("src/main/java/com/gatech/impGuide/us-core.json"));
+                    new FileReader("src/main/java/com/gatech/data/implementationGuide/us-core-patient.json"));
             JSONObject snapshot = (JSONObject) data.get("snapshot");
             JSONArray element = (JSONArray) snapshot.get("element");
             impGuideParser.findMustSupport(element);
@@ -37,7 +37,8 @@ public class PatientController {
 
 
             impGuideParser.findResourceType(data);
-            syntheaRecordFetch.fetchPatients();
+            //TODO: Get the number of patients from client
+            syntheaRecordFetch.fetchPatients(2);
             return data;
         } catch (IOException | ParseException e) {
             e.printStackTrace();
