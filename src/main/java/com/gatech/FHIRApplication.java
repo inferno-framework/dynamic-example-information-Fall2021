@@ -10,6 +10,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class })
 public class FHIRApplication {
@@ -17,16 +19,20 @@ public class FHIRApplication {
     public static void main(String[] args) throws IOException, ParseException {
         //SpringApplication.run(FHIRApplication.class, args);
 
-        //ImplementationGuideTest testImpGuide = new ImplementationGuideTest();
-        //testImpGuide.testFindAllAttributeInIMPGuide();
-
+        // Just an example to show missing attributes in synthea for patient profile
         Helper helper = new Helper();
-        helper.findMissingAttributeByProfile();
+        Map<String, List<String>> missingAttr = helper.findMissingAttributeByProfile();
 
-        Synthea syntheaTest = new Synthea();
-        syntheaTest.findAttributeOnSynthea();
+        System.out.println("Missing values in patient:");
+        for (Map.Entry<String, List<String>> entry : missingAttr.entrySet()) {
+            String key = entry.getKey();
+            List<String> missingValues = entry.getValue();
 
-        PatientController.getAllPatients();
+            for (String missVal : missingValues) {
+                System.out.println(missVal + ",");
+                System.out.println("---");
+            }
+        }
     }
 
 }
