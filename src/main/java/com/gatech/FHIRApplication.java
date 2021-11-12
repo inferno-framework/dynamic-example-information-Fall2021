@@ -1,6 +1,7 @@
 package com.gatech;
 
 import com.gatech.services.Helper;
+import com.gatech.testing.ImplementationGuideTest;
 import org.json.simple.parser.ParseException;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -13,14 +14,15 @@ public class FHIRApplication {
     public static void main(String[] args) throws IOException, ParseException {
         //SpringApplication.run(FHIRApplication.class, args);
 
-        //ImplementationGuideTest testImpGuide = new ImplementationGuideTest();
+          ImplementationGuideTest testImpGuide = new ImplementationGuideTest();
+          testImpGuide.testFunctionality();
         //testImpGuide.testFindAllAttributeInIMPGuide();
 
 //        Synthea syntheaTest = new Synthea();
 //        syntheaTest.findAttributeOnSynthea();
 
-        Helper helper = new Helper();
-        helper.findMissingAttributeByProfile();
+        //Helper helper = new Helper();
+        //helper.findMissingAttributeByProfile();
     }
 
 }

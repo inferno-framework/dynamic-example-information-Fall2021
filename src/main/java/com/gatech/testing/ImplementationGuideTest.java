@@ -4,7 +4,7 @@ import com.gatech.services.parser.ImplementationGuide;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
-
+import com.gatech.services.ValueGenerator;
 import java.io.IOException;
 
 public class ImplementationGuideTest {
@@ -25,7 +25,9 @@ public class ImplementationGuideTest {
         System.out.println(implementationGuide.findValuesInCode("Patient.address.state","us-core-patient.json"));
         System.out.println(implementationGuide.findValuesInCode("Medication.language","us-core-medication.json"));
         System.out.println(implementationGuide.findResourceType(data));
-
+        ValueGenerator generator=new ValueGenerator();
+        System.out.println(generator.generate("Patient.active","us-core-patient.json").toJSONString());
+        System.out.println(generator.generate("Medication.language","us-core-patient.json").toJSONString());
         System.out.println(implementationGuide.findAllElements(element));
     }
 }

@@ -82,7 +82,7 @@ public class ImplementationGuide {
             JSONObject jsonObject2 = (JSONObject) slide;
             String id = (String) jsonObject2.get("id");
 
-            if (id.equals(attribute) && jsonObject2.containsKey("binding")) {
+            if (id.contains(attribute) && jsonObject2.containsKey("binding")) {
                 JSONObject jsonObject3 = (JSONObject) jsonObject2.get("binding");
                 String valueset_link = (String) jsonObject3.get("valueSet");
                 //valueset.add(valueset_link);
