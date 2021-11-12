@@ -6,8 +6,9 @@ import java.net.URL;
 
 public class SyntheaRecordFetch {
     // TODO: List out mustHave element
-    public void fetchPatients() throws IOException {
-        URL url = new URL("http://localhost:8000/?stu=3&p=100");
+    public void fetchPatients(int noOfPatients) throws IOException {
+        String base_url = "http://localhost:8000/?stu=3&p=" + noOfPatients;
+        URL url = new URL(base_url);
         HttpURLConnection http = (HttpURLConnection)url.openConnection();
         http.setRequestProperty("Content-Type", "application/json");
         http.setRequestProperty("Accept", "application/json");
