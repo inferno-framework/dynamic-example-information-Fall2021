@@ -5,6 +5,7 @@ import com.gatech.services.parser.Synthea;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,5 +51,25 @@ public class Helper {
             }
         }
         return missingAttributeOnSynthea;
+    }
+
+    // Retrieve all the profile for US-Core implementation guide
+    public List<String> getAllImplementationGuideProfile() {
+        File folder = new File("src/main/java/com/gatech/data/implementationGuide");
+        File[] listOfFiles = folder.listFiles();
+
+        List<String> profileList = new ArrayList<>();
+
+        for (int i = 0; i < listOfFiles.length; i++) {
+            if (listOfFiles[i].isFile()) {
+                String fileName = listOfFiles[i].getName();
+                String[] fileNameSplit = fileName.split("\\.");
+                String profileNameWithUSCorePre = fileNameSplit[0];
+                String[] splitProfileNameWithUSCorePre = profileNameWithUSCorePre.split("us-core-");
+                String profileName = splitProfileNameWithUSCorePre[splitProfileNameWithUSCorePre.length - 1];
+                profileList.add(profileName);
+            }
+        }
+        return profileList;
     }
 }
