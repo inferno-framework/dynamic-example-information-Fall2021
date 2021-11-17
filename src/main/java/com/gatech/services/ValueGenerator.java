@@ -26,28 +26,38 @@ public class ValueGenerator {
             String[] columns = scanner.nextLine().split(" ");
             primitiveType.put(columns[0],columns[1]);
         }
-        System.out.println(primitiveType);
+        //System.out.println(primitiveType);
 
     }
 
     public JSONObject generate(String attribute, String ig) throws IOException {
         String[] attrs = attribute.split("\\.");
         String attr=attrs[attrs.length-1];
-        String type=findType(attr,ig);
+        String type=findType(attribute,ig);
         JSONObject item = new JSONObject();
-        if (primitiveType.containsKey(type)){
-            String value=primitiveType.get(type);
-            item.put(attr,value);
+        ImplementationGuide implementationGuide = new ImplementationGuide();
+        List<String> code_values=implementationGuide.findValuesInCode(attribute,ig);
+        if (code_values.size()!=0) {
+            item.put(attr, code_values.get(0));
         }else{
-            ImplementationGuide implementationGuide = new ImplementationGuide();
-            List<String> code_values=implementationGuide.findValuesInCode("Medication.language","us-core-medication.json");
-            if (code_values.size()!=0) {
-                item.put(attr, code_values.get(0));
+            if (primitiveType.containsKey(type)){
+                String value=primitiveType.get(type);
+                item.put(attr,value);
             }else{
-                item.put(attr,"not supported yet");
+            item.put(attr,"not supported yet");
             }
         }
         return item;
+    }
+
+    public JSONObject generateComplex(List<String> attributes, String ig) throws IOException {
+        JSONArray ja = new JSONArray();
+        for (String attribute:attributes){
+            ja.add(generate(attribute,ig));
+        }
+        JSONObject mainObj = new JSONObject();
+        mainObj.put(attributes.get(0).split("\\.")[0], ja);
+        return mainObj;
     }
 
     public String findType(String attribute,String ig){
