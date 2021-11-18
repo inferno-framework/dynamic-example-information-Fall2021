@@ -6,10 +6,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Helper {
 
@@ -53,23 +50,41 @@ public class Helper {
         return missingAttributeOnSynthea;
     }
 
-    // Retrieve all the profile for US-Core implementation guide
-    public List<String> getAllImplementationGuideProfile() {
-        File folder = new File("src/main/java/com/gatech/data/implementationGuide");
-        File[] listOfFiles = folder.listFiles();
-
+    public List<String> getAllImplementationGuideProfile(String implementationGuide) {
+        String mainDirectoryPath = "src/main/java/com/gatech/data/implementationGuide/";
+        List<String> impGuideList = getAllImplementationGuideName();
         List<String> profileList = new ArrayList<>();
-
-        for (int i = 0; i < listOfFiles.length; i++) {
-            if (listOfFiles[i].isFile()) {
-                String fileName = listOfFiles[i].getName();
-                String[] fileNameSplit = fileName.split("\\.");
-                String profileNameWithUSCorePre = fileNameSplit[0];
-                String[] splitProfileNameWithUSCorePre = profileNameWithUSCorePre.split("us-core-");
-                String profileName = splitProfileNameWithUSCorePre[splitProfileNameWithUSCorePre.length - 1];
-                profileList.add(profileName);
+        for (String impGuideName : impGuideList) {
+            if (impGuideName.equals(implementationGuide)) {
+                File folder = new File(mainDirectoryPath + implementationGuide);
+                File[] listOfFiles = folder.listFiles();
+                for (int i = 0; i < listOfFiles.length; i++) {
+                    if (listOfFiles[i].isFile()) {
+                        String fileName = listOfFiles[i].getName();
+                        String[] fileNameSplit = fileName.split("\\.");
+                        String profileNameWithUSCorePre = fileNameSplit[0];
+                        String[] splitProfileNameWithUSCorePre = profileNameWithUSCorePre.split(implementationGuide + "-");
+                        String profileName = splitProfileNameWithUSCorePre[splitProfileNameWithUSCorePre.length - 1];
+                        profileList.add(profileName);
+                    }
+                }
+                return profileList;
             }
         }
-        return profileList;
+        return null;
+    }
+
+    public List<String> getAllImplementationGuideName() {
+        File[] directories = new File("src/main/java/com/gatech/data/implementationGuide").listFiles(File::isDirectory);
+
+        List<String> impGuides = new ArrayList<>();
+
+        for (int i = 0; i < directories.length; i++) {
+            String fullPath = String.valueOf(directories[i]);
+            String[] splitFullPath = fullPath.split("\\\\");
+            String impGuide = splitFullPath[splitFullPath.length - 1];
+            impGuides.add(impGuide);
+        }
+        return impGuides;
     }
 }
