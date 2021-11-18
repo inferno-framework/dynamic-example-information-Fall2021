@@ -1,4 +1,14 @@
 ## FHIR Example with Spring Boot and PostgreSQL
+## Prerequisites:
+* Create the folder:
+```
+mkdir -p /var/lib/docker/volumes/synthea
+```
+* Clone synthea to this folder:
+```
+cd /var/lib/docker/volumes/synthea
+git clone https://github.com/smart-on-fhir/synthea.git
+```
 
 ## How it works:
 ### **1. Docker. First, you need to install docker**
