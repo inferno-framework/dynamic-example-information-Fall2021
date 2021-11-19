@@ -127,19 +127,16 @@ public class ImplementationGuide {
         for (Object element : impGuideJson) {
             JSONObject jsonObject2 = (JSONObject) element;
             String id = (String) jsonObject2.get("id");
-
             if (id != null) {
                 if (id.contains(".")) {
                     String[] attrs = id.split("\\.");
-
                     if (attrs.length == 2) {
-                        //System.out.println(attrs[1]);
                         attributes.add(attrs[1]);
                     } else if (attrs.length == 3) {
-                        //System.out.println(attrs[1] + "."  + attrs[2]);
-                        attributes.add(attrs[1] + "." + attrs[2]);
-                    } else {
-
+                        if (attrs[2].contains(":")) {
+                            String[] secondAttrs = attrs[2].split("\\:");
+                            attributes.add(attrs[1] + secondAttrs[0] +secondAttrs[1]);
+                        }
                     }
                 }
             }
