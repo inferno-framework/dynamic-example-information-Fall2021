@@ -13,6 +13,7 @@ import org.jsoup.select.Elements;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,7 +75,7 @@ public class ImplementationGuide {
     public List<String> findValuesInCode(String attribute, String ig) throws IOException {
 
         List<String> valueset = new ArrayList<>();
-        JSONObject impGuideJson = readImplementationGuide("src/main/java/com/gatech/data/implementationGuide/"+ig);
+        JSONObject impGuideJson = readImplementationGuide("src/main/java/com/gatech/data/implementationGuide/" + ig);
         JSONObject snapshot = (JSONObject) impGuideJson.get("snapshot");
         JSONArray element = (JSONArray) snapshot.get("element");
 
@@ -82,30 +83,29 @@ public class ImplementationGuide {
             JSONObject jsonObject2 = (JSONObject) slide;
             String id = (String) jsonObject2.get("id");
 
-            if (id.equals(attribute) && jsonObject2.containsKey("binding")) {
+            if (id.contains(attribute) && jsonObject2.containsKey("binding")) {
                 JSONObject jsonObject3 = (JSONObject) jsonObject2.get("binding");
                 String valueset_link = (String) jsonObject3.get("valueSet");
                 //valueset.add(valueset_link);
                 //grab table content from the link
-                Document doc = Jsoup.connect(valueset_link).get();
+                Document doc = Jsoup.connect(valueset_link.trim().replace("|", "%7C")).get();
                 Element table = doc.select(".codes").first();
-                if (table==null){
+                if (table == null) {
                     table = doc.select(".none").first();
                 }
                 if (table != null) {
                     Element row = table.select("tr").get(2);
                     //List<String> values = List.of(table.text().split(" "));
                     //valueset.addAll(values);
-                    Element col=row.select("td").get(0);
+                    Element col = row.select("td").get(0);
                     valueset.add(col.text());
-                }else{
+                } else {
                     valueset.add("Intensional value set is not supported");
                 }
 
                 return valueset;
             }
         }
-        valueset.add("Intensional value set is not supported");
         return valueset;
     }
 

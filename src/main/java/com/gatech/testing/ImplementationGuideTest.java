@@ -1,11 +1,16 @@
 package com.gatech.testing;
 
 import com.gatech.services.parser.ImplementationGuide;
+import com.gatech.services.Helper;
+import org.hibernate.cfg.annotations.ArrayBinder;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
-
+import com.gatech.services.ValueGenerator;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class ImplementationGuideTest {
 
@@ -20,12 +25,21 @@ public class ImplementationGuideTest {
 
         JSONObject snapshot = (JSONObject) data.get("snapshot");
         JSONArray element = (JSONArray) snapshot.get("element");
-        System.out.println(implementationGuide.findMustSupport(element));
+        /*System.out.println(implementationGuide.findMustSupport(element));
         System.out.println(implementationGuide.findMustHave(element));
         System.out.println(implementationGuide.findValuesInCode("Patient.address.state","us-core-patient.json"));
         System.out.println(implementationGuide.findValuesInCode("Medication.language","us-core-medication.json"));
-        System.out.println(implementationGuide.findResourceType(data));
+        System.out.println(implementationGuide.findResourceType(data));*/
+        ValueGenerator generator=new ValueGenerator();
+        Helper h=new Helper();
+        System.out.println(generator.generate("Patient.active","us-core-patient.json"));
+        System.out.println(generator.generate("Medication.language","us-core-medication.json"));
+        //System.out.println(implementationGuide.findAllElements(element));
+        Map<String, List<String>> m=h.findMissingAttributeByProfile();
 
-        System.out.println(implementationGuide.findAllElements(element));
+        List<String> test= (List<String>) m.values().toArray()[0];
+        int index=test.indexOf("address.id");
+        System.out.println(test.subList(index,index+12));
+        System.out.println(generator.generateComplex(test.subList(index,index+12),"us-core-patient.json"));
     }
 }
