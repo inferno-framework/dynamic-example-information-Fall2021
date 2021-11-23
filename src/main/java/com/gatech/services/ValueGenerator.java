@@ -61,7 +61,7 @@ public class ValueGenerator {
     }
 
     public String findType(String attribute,String ig){
-        JSONObject impGuideJson = readImplementationGuide("src/main/java/com/gatech/data/implementationGuide/"+ig);
+        JSONObject impGuideJson = readImplementationGuide("src/main/java/com/gatech/data/implementationGuide/us-core/"+ig);
         JSONObject snapshot = (JSONObject) impGuideJson.get("snapshot");
         JSONArray element = (JSONArray) snapshot.get("element");
 

@@ -1,4 +1,8 @@
 version: '2.1'
+volumes:
+  synthea:
+    driver: local
+
 services:
   API:
     image: 'api.jar'

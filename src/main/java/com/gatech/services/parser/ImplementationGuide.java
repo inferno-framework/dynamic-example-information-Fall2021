@@ -75,7 +75,7 @@ public class ImplementationGuide {
     public List<String> findValuesInCode(String attribute, String ig) throws IOException {
 
         List<String> valueset = new ArrayList<>();
-        JSONObject impGuideJson = readImplementationGuide("src/main/java/com/gatech/data/implementationGuide/" + ig);
+        JSONObject impGuideJson = readImplementationGuide("src/main/java/com/gatech/data/implementationGuide/us-core/" + ig);
         JSONObject snapshot = (JSONObject) impGuideJson.get("snapshot");
         JSONArray element = (JSONArray) snapshot.get("element");
 
@@ -116,7 +116,7 @@ public class ImplementationGuide {
 
     public String findResourceType(JSONObject impGuideJson) {
         String kind = (String) impGuideJson.get("type");
-        System.out.println("The resource is " + kind);
+//        System.out.println("The resource is " + kind);
         return kind;
     }
 
