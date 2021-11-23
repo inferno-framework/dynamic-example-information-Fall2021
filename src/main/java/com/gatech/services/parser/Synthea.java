@@ -30,6 +30,7 @@ public class Synthea {
         try {
             // Read the JSON file. This will be changed accordingly when we read the input file from the output folder in local repo that is mapped to container using Volume
             Object obj = readSyntheaFile();
+
             JSONObject jsonObject =  (JSONObject) obj;
 
             // Fetch the entire json array from entry
@@ -38,12 +39,22 @@ public class Synthea {
             // Loop through the entire entries and check for resource object. We are not concerned with FullUrl and other object
             for (int i = 0; i < entries.size(); i++) {
                 final JSONObject eachJSONObject = (JSONObject) entries.get(i);
+                JSONObject postResource = (JSONObject) eachJSONObject.get("request");
+                String fullUrl = (String) eachJSONObject.get("fullUrl");
+
                 for (Object key : eachJSONObject.keySet()) {
                     // If we found the resource, then we can now retrieve the value using resource Object and JSONObjects using resourceType objects
                     if (key.equals("resource")) {
+
                         JSONObject resourceObj = (JSONObject) eachJSONObject.get("resource");
                         String resourceType = (String) resourceObj.get("resourceType");
-                        profileByResource.put(resourceType, resourceObj);
+
+                        JSONObject finalResourceObj = new JSONObject();
+                        finalResourceObj.put("resource", resourceObj);
+                        finalResourceObj.put("request", postResource);
+                        finalResourceObj.put("fullUrl", fullUrl);
+
+                        profileByResource.put(resourceType, finalResourceObj);
                     }
                 }
             }
