@@ -136,6 +136,8 @@ public class ImplementationGuide {
                         if (attrs[2].contains(":")) {
                             String[] secondAttrs = attrs[2].split("\\:");
                             attributes.add(attrs[1] + secondAttrs[0] +secondAttrs[1]);
+                        }else{
+                            attributes.add(attrs[1] + "." + attrs[2]);
                         }
                     }
                 }

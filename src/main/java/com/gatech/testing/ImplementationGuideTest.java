@@ -32,16 +32,17 @@ public class ImplementationGuideTest {
         System.out.println(implementationGuide.findValuesInCode("Medication.language","us-core-medication.json"));
         System.out.println(implementationGuide.findResourceType(data));*/
         ValueGenerator generator=new ValueGenerator();
-        Helper h=new Helper();
+       // Helper h=new Helper();
+        //Map<String, List<String>> m=h.findMissingAttributeByProfile("src/main/java/com/gatech/data/implementationGuide/us-core/us-core-patient.json");
         System.out.println(generator.generate("Patient.active","us-core-patient.json"));
         System.out.println(generator.generate("Medication.language","us-core-medication.json"));
         //System.out.println(implementationGuide.findAllElements(element));
-        Map<String, List<String>> m=h.findMissingAttributeByProfile();
 
-        List<String> test= (List<String>) m.values().toArray()[0];
-//        int index=test.indexOf("address.id");
-//        System.out.println(test.subList(index,index+12));
-//        System.out.println(generator.generateComplex(test.subList(index,index+12),"us-core-patient.json"));
+        //System.out.println(m);
+        //List<String> test= (List<String>) m.values().toArray()[0];
+        //int index=test.indexOf("address.id");
+        //System.out.println(test.subList(index,index+12));
+        //System.out.println(generator.generateComplex(test.subList(index,index+12),"us-core-patient.json"));
         ExampleGenerator exampleGenerator = new ExampleGenerator();
         exampleGenerator.generate();
 

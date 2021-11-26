@@ -71,9 +71,12 @@ public class ValueGenerator {
 
             if (id.contains(attribute)) {
                 JSONArray types = (JSONArray) jsonObject2.get("type");
-                JSONObject type = (JSONObject) types.get(0);
-                String type_code = (String) type.get("code");
-                return type_code;
+                if (types!=null){
+                    JSONObject type = (JSONObject) types.get(0);
+                    String type_code = (String) type.get("code");
+                    return type_code;
+                }
+
             }
         }
         return null;

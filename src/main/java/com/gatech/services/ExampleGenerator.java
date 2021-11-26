@@ -59,9 +59,39 @@ public class ExampleGenerator {
         ValueGenerator generator=new ValueGenerator();
 
         JSONObject generatedData = new JSONObject();
-        for(String attr : allAttributesOnImpGuide){
-            data = generator.generate(attr, profileName.getName());
-            generatedData.put(attr, data.get(attr));
+
+        Boolean trigger=false;
+        List<String> attributes=new ArrayList<String>();
+
+        for(int i = 0; i<allAttributesOnImpGuide.size()-1; i++){
+            String attr=allAttributesOnImpGuide.get(i);
+            String next=allAttributesOnImpGuide.get(i+1);
+            if (trigger){
+                String[] attrs = attr.split("\\.");
+                String[] nexts = next.split("\\.");
+                attributes.add(attr);
+                if (!attrs[0].equals(nexts[0])){
+                    trigger=false;
+                    data = generator.generateComplex(attributes,profileName.getName());
+                    generatedData.put(attr, data.get(attr));
+                    attributes=new ArrayList<String>();
+                    if (i==allAttributesOnImpGuide.size()-1){
+                        data = generator.generate(next, profileName.getName());
+                        generatedData.put(attr, data.get(attr));
+                    }
+                }else if (i==allAttributesOnImpGuide.size()-1){
+                    attributes.add(next);
+                    data = generator.generateComplex(attributes,profileName.getName());
+                    generatedData.put(attr, data.get(attr));
+                }
+            }else{
+                if (next.contains(attr) ){
+                    trigger=true;
+                }else{
+                    data = generator.generate(attr, profileName.getName());
+                    generatedData.put(attr, data.get(attr));
+                }
+            }
         }
         return generatedData;
     }

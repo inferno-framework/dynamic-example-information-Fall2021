@@ -16,7 +16,7 @@ import java.util.List;
 public class FHIRApplication {
 
     public static void main(String[] args) throws IOException, ParseException {
-        SpringApplication.run(FHIRApplication.class, args);
+        //SpringApplication.run(FHIRApplication.class, args);
 
           ImplementationGuideTest testImpGuide = new ImplementationGuideTest();
           testImpGuide.testFunctionality();
