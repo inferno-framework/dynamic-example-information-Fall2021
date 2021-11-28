@@ -94,7 +94,14 @@ public class ImplementationGuide {
                     table = doc.select(".none").first();
                 }
                 if (table != null) {
-                    Element row = table.select("tr").get(2);
+
+                    Elements rows=table.select("tr");
+                    Element row;
+                    if (rows.size()>1){
+                        row = rows.get(1);
+                    }else{
+                        row = rows.get(0);
+                    }
                     //List<String> values = List.of(table.text().split(" "));
                     //valueset.addAll(values);
                     Element col = row.select("td").get(0);

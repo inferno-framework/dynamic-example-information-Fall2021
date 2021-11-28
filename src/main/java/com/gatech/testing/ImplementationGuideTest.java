@@ -32,11 +32,11 @@ public class ImplementationGuideTest {
         System.out.println(implementationGuide.findValuesInCode("Medication.language","us-core-medication.json"));
         System.out.println(implementationGuide.findResourceType(data));*/
         ValueGenerator generator=new ValueGenerator();
-       // Helper h=new Helper();
-        //Map<String, List<String>> m=h.findMissingAttributeByProfile("src/main/java/com/gatech/data/implementationGuide/us-core/us-core-patient.json");
+        Helper h=new Helper();
+        Map<String, List<String>> m=h.findMissingAttributeByProfile("src/main/java/com/gatech/data/implementationGuide/us-core/us-core-patient.json");
         System.out.println(generator.generate("Patient.active","us-core-patient.json"));
         System.out.println(generator.generate("Medication.language","us-core-medication.json"));
-        //System.out.println(implementationGuide.findAllElements(element));
+        System.out.println(implementationGuide.findAllElements(element));
 
         //System.out.println(m);
         //List<String> test= (List<String>) m.values().toArray()[0];
