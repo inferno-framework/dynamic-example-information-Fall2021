@@ -75,7 +75,7 @@ public class ImplementationGuide {
     public List<String> findValuesInCode(String attribute, String ig) throws IOException {
 
         List<String> valueset = new ArrayList<>();
-        JSONObject impGuideJson = readImplementationGuide("src/main/java/com/gatech/data/implementationGuide/" + ig);
+        JSONObject impGuideJson = readImplementationGuide(ig);
         JSONObject snapshot = (JSONObject) impGuideJson.get("snapshot");
         JSONArray element = (JSONArray) snapshot.get("element");
 
@@ -88,18 +88,27 @@ public class ImplementationGuide {
                 String valueset_link = (String) jsonObject3.get("valueSet");
                 //valueset.add(valueset_link);
                 //grab table content from the link
-                Document doc = Jsoup.connect(valueset_link.trim().replace("|", "%7C")).get();
-                Element table = doc.select(".codes").first();
-                if (table == null) {
-                    table = doc.select(".none").first();
-                }
-                if (table != null) {
-                    Element row = table.select("tr").get(2);
-                    //List<String> values = List.of(table.text().split(" "));
-                    //valueset.addAll(values);
-                    Element col = row.select("td").get(0);
-                    valueset.add(col.text());
-                } else {
+                if (valueset_link != null) {
+                    Document doc = Jsoup.connect(valueset_link.trim().replace("|", "%7C")).get();
+                    Element table = doc.select(".codes").first();
+                    if (table == null) {
+                        table = doc.select(".none").first();
+                    }
+                    if (table != null) {
+
+                        Elements rows = table.select("tr");
+                        Element row;
+                        if (rows.size() > 1) {
+                            row = rows.get(1);
+                        } else {
+                            row = rows.get(0);
+                        }
+                        //List<String> values = List.of(table.text().split(" "));
+                        //valueset.addAll(values);
+                        Element col = row.select("td").get(0);
+                        valueset.add(col.text());
+                    }
+                }else {
                     valueset.add("Intensional value set is not supported");
                 }
 
@@ -116,7 +125,7 @@ public class ImplementationGuide {
 
     public String findResourceType(JSONObject impGuideJson) {
         String kind = (String) impGuideJson.get("type");
-        System.out.println("The resource is " + kind);
+//        System.out.println("The resource is " + kind);
         return kind;
     }
 
@@ -136,6 +145,8 @@ public class ImplementationGuide {
                         if (attrs[2].contains(":")) {
                             String[] secondAttrs = attrs[2].split("\\:");
                             attributes.add(attrs[1] + secondAttrs[0] +secondAttrs[1]);
+                        }else{
+                            attributes.add(attrs[1] + "." + attrs[2]);
                         }
                     }
                 }

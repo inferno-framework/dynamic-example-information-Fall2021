@@ -66,11 +66,7 @@ public class Synthea {
 
     public Object readSyntheaFile() throws IOException, ParseException {
         JSONParser parser = new JSONParser();
-        List<File> filesInFolder = Files.walk(Paths.get("/var/lib/docker/volumes/synthea/fhir"))
-                .filter(Files::isRegularFile)
-                .map(Path::toFile)
-                .collect(Collectors.toList());
-        Object obj = parser.parse(new FileReader(filesInFolder.get(0)));
+        Object obj = parser.parse(new FileReader("src/main/java/com/gatech/data/synthea/Aaron697_Brekke496_2fa15bc7-8866-461a-9000-f739e425860a.json"));
         return obj;
     }
 }
