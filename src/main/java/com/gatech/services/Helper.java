@@ -16,10 +16,10 @@ public class Helper {
 
     public Helper() {}
 
-    public Map<String, List<String>> findMissingAttributeByProfile() {
+    public Map<String, List<String>> findMissingAttributeByProfile(String filepath) {
         // Get all attribute from implementation
         ImplementationGuide implementationGuide = new ImplementationGuide();
-        JSONObject data = implementationGuide.readImplementationGuide("src/main/java/com/gatech/data/implementationGuide/us-core-patient.json");
+        JSONObject data = implementationGuide.readImplementationGuide(filepath);
         JSONObject snapshot = (JSONObject) data.get("snapshot");
         JSONArray element = (JSONArray) snapshot.get("element");
 
@@ -60,7 +60,7 @@ public class Helper {
         List<String> impGuideList = getAllImplementationGuideName();
         List<String> profileList = new ArrayList<>();
         for (String impGuideName : impGuideList) {
-            if (impGuideName.equals(implementationGuide)) {
+            if (impGuideName.equals(mainDirectoryPath + implementationGuide)) {
                 File folder = new File(mainDirectoryPath + implementationGuide);
                 File[] listOfFiles = folder.listFiles();
                 for (int i = 0; i < listOfFiles.length; i++) {

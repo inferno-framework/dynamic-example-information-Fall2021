@@ -61,7 +61,7 @@ public class ValueGenerator {
     }
 
     public String findType(String attribute,String ig){
-        JSONObject impGuideJson = readImplementationGuide("src/main/java/com/gatech/data/implementationGuide/"+ig);
+        JSONObject impGuideJson = readImplementationGuide("src/main/java/com/gatech/data/implementationGuide/us-core/"+ig);
         JSONObject snapshot = (JSONObject) impGuideJson.get("snapshot");
         JSONArray element = (JSONArray) snapshot.get("element");
 
@@ -71,9 +71,12 @@ public class ValueGenerator {
 
             if (id.contains(attribute)) {
                 JSONArray types = (JSONArray) jsonObject2.get("type");
-                JSONObject type = (JSONObject) types.get(0);
-                String type_code = (String) type.get("code");
-                return type_code;
+                if (types!=null){
+                    JSONObject type = (JSONObject) types.get(0);
+                    String type_code = (String) type.get("code");
+                    return type_code;
+                }
+
             }
         }
         return null;

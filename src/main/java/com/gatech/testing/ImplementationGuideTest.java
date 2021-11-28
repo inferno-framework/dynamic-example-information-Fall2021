@@ -7,6 +7,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import com.gatech.services.ValueGenerator;
+import com.gatech.services.ExampleGenerator;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class ImplementationGuideTest {
     public void testFunctionality() throws IOException, ParseException {
         ImplementationGuide implementationGuide = new ImplementationGuide();
 
-        final JSONObject data = implementationGuide.readImplementationGuide("src/main/java/com/gatech/data/implementationGuide/us-core-patient.json");
+        final JSONObject data = implementationGuide.readImplementationGuide("src/main/java/com/gatech/data/implementationGuide/us-core/us-core-patient.json");
 
         JSONObject snapshot = (JSONObject) data.get("snapshot");
         JSONArray element = (JSONArray) snapshot.get("element");
@@ -32,14 +33,19 @@ public class ImplementationGuideTest {
         System.out.println(implementationGuide.findResourceType(data));*/
         ValueGenerator generator=new ValueGenerator();
         Helper h=new Helper();
+        Map<String, List<String>> m=h.findMissingAttributeByProfile("src/main/java/com/gatech/data/implementationGuide/us-core/us-core-patient.json");
         System.out.println(generator.generate("Patient.active","us-core-patient.json"));
         System.out.println(generator.generate("Medication.language","us-core-medication.json"));
-        //System.out.println(implementationGuide.findAllElements(element));
-        Map<String, List<String>> m=h.findMissingAttributeByProfile();
+        System.out.println(implementationGuide.findAllElements(element));
 
-        List<String> test= (List<String>) m.values().toArray()[0];
-        int index=test.indexOf("address.id");
-        System.out.println(test.subList(index,index+12));
-        System.out.println(generator.generateComplex(test.subList(index,index+12),"us-core-patient.json"));
+        //System.out.println(m);
+        //List<String> test= (List<String>) m.values().toArray()[0];
+        //int index=test.indexOf("address.id");
+        //System.out.println(test.subList(index,index+12));
+        //System.out.println(generator.generateComplex(test.subList(index,index+12),"us-core-patient.json"));
+        ExampleGenerator exampleGenerator = new ExampleGenerator();
+        exampleGenerator.generate();
+
+
     }
 }

@@ -75,7 +75,7 @@ public class ImplementationGuide {
     public List<String> findValuesInCode(String attribute, String ig) throws IOException {
 
         List<String> valueset = new ArrayList<>();
-        JSONObject impGuideJson = readImplementationGuide("src/main/java/com/gatech/data/implementationGuide/" + ig);
+        JSONObject impGuideJson = readImplementationGuide("src/main/java/com/gatech/data/implementationGuide/us-core/" + ig);
         JSONObject snapshot = (JSONObject) impGuideJson.get("snapshot");
         JSONArray element = (JSONArray) snapshot.get("element");
 
@@ -94,7 +94,14 @@ public class ImplementationGuide {
                     table = doc.select(".none").first();
                 }
                 if (table != null) {
-                    Element row = table.select("tr").get(2);
+
+                    Elements rows=table.select("tr");
+                    Element row;
+                    if (rows.size()>1){
+                        row = rows.get(1);
+                    }else{
+                        row = rows.get(0);
+                    }
                     //List<String> values = List.of(table.text().split(" "));
                     //valueset.addAll(values);
                     Element col = row.select("td").get(0);
@@ -116,7 +123,7 @@ public class ImplementationGuide {
 
     public String findResourceType(JSONObject impGuideJson) {
         String kind = (String) impGuideJson.get("type");
-        System.out.println("The resource is " + kind);
+//        System.out.println("The resource is " + kind);
         return kind;
     }
 
@@ -136,6 +143,8 @@ public class ImplementationGuide {
                         if (attrs[2].contains(":")) {
                             String[] secondAttrs = attrs[2].split("\\:");
                             attributes.add(attrs[1] + secondAttrs[0] +secondAttrs[1]);
+                        }else{
+                            attributes.add(attrs[1] + "." + attrs[2]);
                         }
                     }
                 }
