@@ -4,6 +4,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Document;
@@ -72,7 +73,7 @@ public class ImplementationGuide {
     }
 
     // TODO: Check for the "code" datatype, and list out all the supported values from the resources it is binded to
-    public List<String> findValuesInCode(String attribute, String ig) throws IOException {
+    public List<String> findValuesInCode(String attribute, String ig) throws IOException, HttpStatusException {
 
         List<String> valueset = new ArrayList<>();
         JSONObject impGuideJson = readImplementationGuide(ig);
@@ -89,24 +90,28 @@ public class ImplementationGuide {
                 //valueset.add(valueset_link);
                 //grab table content from the link
                 if (valueset_link != null) {
-                    Document doc = Jsoup.connect(valueset_link.trim().replace("|", "%7C")).get();
-                    Element table = doc.select(".codes").first();
-                    if (table == null) {
-                        table = doc.select(".none").first();
-                    }
-                    if (table != null) {
-
-                        Elements rows = table.select("tr");
-                        Element row;
-                        if (rows.size() > 1) {
-                            row = rows.get(1);
-                        } else {
-                            row = rows.get(0);
+                    try {
+                        Document doc = Jsoup.connect(valueset_link.trim().replace("|", "%7C")).get();
+                        Element table = doc.select(".codes").first();
+                        if (table == null) {
+                            table = doc.select(".none").first();
                         }
-                        //List<String> values = List.of(table.text().split(" "));
-                        //valueset.addAll(values);
-                        Element col = row.select("td").get(0);
-                        valueset.add(col.text());
+                        if (table != null) {
+
+                            Elements rows = table.select("tr");
+                            Element row;
+                            if (rows.size() > 1) {
+                                row = rows.get(1);
+                            } else {
+                                row = rows.get(0);
+                            }
+                            //List<String> values = List.of(table.text().split(" "));
+                            //valueset.addAll(values);
+                            Element col = row.select("td").get(0);
+                            valueset.add(col.text());
+                        }
+                    } catch (HttpStatusException e){
+                        valueset.add("Intensional value set is not supported");
                     }
                 }else {
                     valueset.add("Intensional value set is not supported");

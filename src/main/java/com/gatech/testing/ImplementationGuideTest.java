@@ -44,7 +44,12 @@ public class ImplementationGuideTest {
         //System.out.println(test.subList(index,index+12));
         //System.out.println(generator.generateComplex(test.subList(index,index+12),"us-core-patient.json"));
         ExampleGenerator exampleGenerator = new ExampleGenerator();
+        System.out.println("Generated Data for us-core Implementation Guide");
         exampleGenerator.generate("us-core");
+        System.out.println("Generated Data for qi-core Implementation Guide");
+        exampleGenerator.generate("qi-core");
+        System.out.println("Generated Data for ips Implementation Guide");
+        exampleGenerator.generate("ips");
 
 
     }
