@@ -11,10 +11,8 @@ import org.jsoup.nodes.Element;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+
 import com.gatech.services.parser.ImplementationGuide;
 
 public class ValueGenerator {
@@ -42,7 +40,18 @@ public class ValueGenerator {
         }else{
             if (primitiveType.containsKey(type)){
                 String value=primitiveType.get(type);
-                item.put(attr,value);
+                if (value.equals("uuid")) {
+                    item.put(attr, UUID.randomUUID());
+                }else if(value.equals("current_date")){
+                    item.put(attr,java.time.LocalDate.now().toString());
+                }else if(value.equals("current_time")){
+                    item.put(attr,java.time.LocalTime.now().toString());
+                }else if(value.equals("current_datetime")){
+                    item.put(attr,java.time.LocalDateTime.now().toString());
+                }
+                else {
+                    item.put(attr, value);
+                }
             }else{
             item.put(attr,"not supported yet");
             }
@@ -61,7 +70,7 @@ public class ValueGenerator {
     }
 
     public String findType(String attribute,String ig){
-        JSONObject impGuideJson = readImplementationGuide("src/main/java/com/gatech/data/implementationGuide/us-core/"+ig);
+        JSONObject impGuideJson = readImplementationGuide(ig);
         JSONObject snapshot = (JSONObject) impGuideJson.get("snapshot");
         JSONArray element = (JSONArray) snapshot.get("element");
 

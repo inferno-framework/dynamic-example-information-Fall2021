@@ -13,7 +13,7 @@ import java.util.*;
 
 public class ExampleGenerator {
 
-    public void generate() throws IOException, ParseException {
+    public void generate(String ig) throws IOException, ParseException {
 
         ImplementationGuide implementationGuide = new ImplementationGuide();
 
@@ -21,17 +21,17 @@ public class ExampleGenerator {
         Map<String, JSONObject> resourceAndJSON = synthea.findAttributeOnSynthea();
         Collection<JSONObject> items = new ArrayList<JSONObject>();
 
-        File[] files = new File("src/main/java/com/gatech/data/implementationGuide/us-core/").listFiles(File::isFile);
+        File[] files = new File("src/main/java/com/gatech/data/implementationGuide/"+ig).listFiles(File::isFile);
 
         JSONObject example = new JSONObject();
 
-        String fullUrl = "urn:uuid:4d2b6ddd-47a7-4124-96fc-ca2ae8effc11";
         JSONParser parser = new JSONParser();
-        JSONObject request = (JSONObject) parser.parse("{\"method\": \"POST\",\"url\": \"Generated\"}");
         for(File profile : files != null ? files : new File[0]){
             JSONObject data = implementationGuide.readImplementationGuide(profile.getAbsolutePath());
             String resourceType = implementationGuide.findResourceType(data);
             if(resourceAndJSON.get(resourceType) == null){
+                String fullUrl = String.format("urn:uuid:%s", UUID.randomUUID());
+                JSONObject request = (JSONObject) parser.parse(String.format("{\"method\": \"POST\",\"url\": \"%s\"}", resourceType));
                 JSONObject generatedData = generateDataForProfile(profile);
                 JSONObject finalData = new JSONObject();
                 finalData.put("fullUrl", fullUrl);
@@ -72,23 +72,23 @@ public class ExampleGenerator {
                 attributes.add(attr);
                 if (!attrs[0].equals(nexts[0])){
                     trigger=false;
-                    data = generator.generateComplex(attributes,profileName.getName());
+                    data = generator.generateComplex(attributes,profileName.getAbsolutePath());
                     generatedData.put(attr, data.get(attr));
                     attributes=new ArrayList<String>();
                     if (i==allAttributesOnImpGuide.size()-1){
-                        data = generator.generate(next, profileName.getName());
+                        data = generator.generate(next, profileName.getAbsolutePath());
                         generatedData.put(attr, data.get(attr));
                     }
                 }else if (i==allAttributesOnImpGuide.size()-1){
                     attributes.add(next);
-                    data = generator.generateComplex(attributes,profileName.getName());
+                    data = generator.generateComplex(attributes,profileName.getAbsolutePath());
                     generatedData.put(attr, data.get(attr));
                 }
             }else{
                 if (next.contains(attr) ){
                     trigger=true;
                 }else{
-                    data = generator.generate(attr, profileName.getName());
+                    data = generator.generate(attr, profileName.getAbsolutePath());
                     generatedData.put(attr, data.get(attr));
                 }
             }

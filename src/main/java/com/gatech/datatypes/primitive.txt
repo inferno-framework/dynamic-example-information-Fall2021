@@ -15,4 +15,4 @@ id R4jMeagKNFkCn5nOIkIkX3lZTG6wbC570
 markdown sample
 unsignedInt 100
 positiveInt 1000
-uuid urn:uuid:c757873d-ec9a-4326-a141-556f43239520
+uuid uuid
