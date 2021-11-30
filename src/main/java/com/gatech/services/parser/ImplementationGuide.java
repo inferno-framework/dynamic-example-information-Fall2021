@@ -73,19 +73,14 @@ public class ImplementationGuide {
     }
 
     // TODO: Check for the "code" datatype, and list out all the supported values from the resources it is binded to
-    public List<String> findValuesInCode(String attribute, String ig) throws IOException, HttpStatusException {
+    public List<String> findValuesInCode(String attribute, JSONObject element) throws IOException, HttpStatusException {
 
         List<String> valueset = new ArrayList<>();
-        JSONObject impGuideJson = readImplementationGuide(ig);
-        JSONObject snapshot = (JSONObject) impGuideJson.get("snapshot");
-        JSONArray element = (JSONArray) snapshot.get("element");
 
-        for (Object slide : element) {
-            JSONObject jsonObject2 = (JSONObject) slide;
-            String id = (String) jsonObject2.get("id");
+            String id = (String) element.get("id");
 
-            if (id.contains(attribute) && jsonObject2.containsKey("binding")) {
-                JSONObject jsonObject3 = (JSONObject) jsonObject2.get("binding");
+            if (id.contains(attribute) && element.containsKey("binding")) {
+                JSONObject jsonObject3 = (JSONObject) element.get("binding");
                 String valueset_link = (String) jsonObject3.get("valueSet");
                 //valueset.add(valueset_link);
                 //grab table content from the link
@@ -119,7 +114,6 @@ public class ImplementationGuide {
 
                 return valueset;
             }
-        }
         return valueset;
     }
 
@@ -134,29 +128,46 @@ public class ImplementationGuide {
         return kind;
     }
 
+    // Method overloaded for findAllElements to add default values to parameters.
+    public List<String> findAllElements(JSONArray impGuideJson) {
+        return findAllElements(impGuideJson, false);
+    }
 
     // Parse all the attribute from implementation guide
-    public List<String> findAllElements(JSONArray impGuideJson) {
+    public List<String> findAllElements(JSONArray impGuideJson, Boolean mustSupport) {
         List<String> attributes = new ArrayList<>();
         for (Object element : impGuideJson) {
             JSONObject jsonObject2 = (JSONObject) element;
             String id = (String) jsonObject2.get("id");
-            if (id != null) {
-                if (id.contains(".")) {
-                    String[] attrs = id.split("\\.");
-                    if (attrs.length == 2) {
-                        attributes.add(attrs[1]);
-                    } else if (attrs.length == 3) {
-                        if (attrs[2].contains(":")) {
-                            String[] secondAttrs = attrs[2].split("\\:");
-                            attributes.add(attrs[1] + secondAttrs[0] +secondAttrs[1]);
-                        }else{
-                            attributes.add(attrs[1] + "." + attrs[2]);
-                        }
-                    }
+            long mustHaveValue = (long) jsonObject2.get("min");
+            Boolean mustSupportValue = (Boolean) jsonObject2.get("mustSupport");
+            if ((mustHaveValue > 0 ) || (mustSupport && mustSupportValue != null && mustSupportValue)){
+                String attr = findAttributes(id);
+                if (attr != null) {
+                    attributes.add(attr);
                 }
             }
         }
         return attributes;
     }
+
+    public String findAttributes(String id){
+        if (id != null) {
+            if (id.contains(".")) {
+                String[] attrs = id.split("\\.");
+                if (attrs.length == 2) {
+                    return attrs[1];
+                } else if (attrs.length == 3) {
+                    if (attrs[2].contains(":")) {
+                        String[] secondAttrs = attrs[2].split("\\:");
+                        return attrs[1] + secondAttrs[0] +secondAttrs[1];
+                    }else{
+                        return attrs[1] + "." + attrs[2];
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
 }

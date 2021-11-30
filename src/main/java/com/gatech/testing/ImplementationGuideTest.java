@@ -10,6 +10,7 @@ import com.gatech.services.ValueGenerator;
 import com.gatech.services.ExampleGenerator;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +27,21 @@ public class ImplementationGuideTest {
 
         JSONObject snapshot = (JSONObject) data.get("snapshot");
         JSONArray element = (JSONArray) snapshot.get("element");
+        List<String> allAttributesOnImpGuide = implementationGuide.findAllElements(element);
+
+        Map<String, JSONObject> attributeElement = new HashMap<>();
+
+        for (String attribute:allAttributesOnImpGuide) {
+            for (Object slide : element) {
+                JSONObject jsonObject2 = (JSONObject) slide;
+                String id = (String) jsonObject2.get("id");
+
+                if (id.contains(attribute)) {
+                    attributeElement.put(attribute, jsonObject2);
+                    break;
+                }
+            }
+        }
         /*System.out.println(implementationGuide.findMustSupport(element));
         System.out.println(implementationGuide.findMustHave(element));
         System.out.println(implementationGuide.findValuesInCode("Patient.address.state","us-core-patient.json"));
@@ -34,8 +50,28 @@ public class ImplementationGuideTest {
         ValueGenerator generator=new ValueGenerator();
         Helper h=new Helper();
         Map<String, List<String>> m=h.findMissingAttributeByProfile("src/main/java/com/gatech/data/implementationGuide/us-core/us-core-patient.json");
-        System.out.println(generator.generate("Patient.active","src/main/java/com/gatech/data/implementationGuide/us-core/us-core-patient.json"));
-        System.out.println(generator.generate("Medication.language","src/main/java/com/gatech/data/implementationGuide/us-core/us-core-medication.json"));
+        System.out.println(generator.generate("address.city", attributeElement.get("address.city")));
+
+        final JSONObject data1 = implementationGuide.readImplementationGuide("src/main/java/com/gatech/data/implementationGuide/us-core/us-core-condition.json");
+
+        JSONObject snapshot1 = (JSONObject) data1.get("snapshot");
+        JSONArray element1 = (JSONArray) snapshot1.get("element");
+        List<String> allAttributesOnImpGuide1 = implementationGuide.findAllElements(element1);
+
+        Map<String, JSONObject> attributeElement1 = new HashMap<>();
+
+        for (String attribute:allAttributesOnImpGuide1) {
+            for (Object slide : element1) {
+                JSONObject jsonObject2 = (JSONObject) slide;
+                String id = (String) jsonObject2.get("id");
+
+                if (id.contains(attribute)) {
+                    attributeElement1.put(attribute, jsonObject2);
+                    break;
+                }
+            }
+        }
+        System.out.println(generator.generate("category", attributeElement1.get("category")));
         System.out.println(implementationGuide.findAllElements(element));
 
         //System.out.println(m);
