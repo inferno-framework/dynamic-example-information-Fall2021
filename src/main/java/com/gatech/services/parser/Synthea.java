@@ -1,5 +1,7 @@
 package com.gatech.services.parser;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -22,10 +24,10 @@ public class Synthea {
 
     // Parse the profiles from Synthea
 
-    public Map<String, JSONObject> findAttributeOnSynthea() {
+    public Multimap<String, JSONObject> findAttributeOnSynthea() {
 
         // Storing the resourceType as a key and the JSON object as it's respective value
-        Map<String, JSONObject> profileByResource = new HashMap<>();
+        Multimap<String, JSONObject> profileByResource = HashMultimap.create();
         JSONParser parser = new JSONParser();
         try {
             // Read the JSON file. This will be changed accordingly when we read the input file from the output folder in local repo that is mapped to container using Volume

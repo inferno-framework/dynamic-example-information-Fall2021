@@ -2,6 +2,7 @@ package com.gatech.services;
 
 import com.gatech.services.parser.ImplementationGuide;
 import com.gatech.services.parser.Synthea;
+import com.google.common.collect.Multimap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -18,9 +19,10 @@ public class ExampleGenerator {
         ImplementationGuide implementationGuide = new ImplementationGuide();
 
         Synthea synthea = new Synthea();
-        Map<String, JSONObject> resourceAndJSON = synthea.findAttributeOnSynthea();
+        Multimap<String, JSONObject> resourceAndJSON = synthea.findAttributeOnSynthea();
         Collection<JSONObject> items = new ArrayList<JSONObject>();
 
+        List<String> keysFetchedFromSynthea=new ArrayList<String>();
         File[] files = new File("src/main/java/com/gatech/data/implementationGuide/"+ig).listFiles(File::isFile);
 
         JSONObject example = new JSONObject();
@@ -29,7 +31,7 @@ public class ExampleGenerator {
         for(File profile : files != null ? files : new File[0]){
             JSONObject data = implementationGuide.readImplementationGuide(profile.getAbsolutePath());
             String resourceType = implementationGuide.findResourceType(data);
-            if(resourceAndJSON.get(resourceType) == null){
+            if(resourceAndJSON.get(resourceType).isEmpty()){
                 String fullUrl = String.format("urn:uuid:%s", UUID.randomUUID());
                 JSONObject request = (JSONObject) parser.parse(String.format("{\"method\": \"POST\",\"url\": \"%s\"}", resourceType));
                 JSONObject generatedData = generateDataForProfile(data);
@@ -39,8 +41,10 @@ public class ExampleGenerator {
                 finalData.put("request", request);
                 items.add(finalData);
             }
-            else {
-                items.add(resourceAndJSON.get(resourceType));
+            else if (keysFetchedFromSynthea.contains(resourceType));
+            else{
+                items.addAll(resourceAndJSON.get(resourceType));
+                keysFetchedFromSynthea.add(resourceType);
             }
 
         }
