@@ -73,19 +73,14 @@ public class ImplementationGuide {
     }
 
     // TODO: Check for the "code" datatype, and list out all the supported values from the resources it is binded to
-    public List<String> findValuesInCode(String attribute, String ig) throws IOException, HttpStatusException {
+    public List<String> findValuesInCode(String attribute, JSONObject element) throws IOException, HttpStatusException {
 
         List<String> valueset = new ArrayList<>();
-        JSONObject impGuideJson = readImplementationGuide(ig);
-        JSONObject snapshot = (JSONObject) impGuideJson.get("snapshot");
-        JSONArray element = (JSONArray) snapshot.get("element");
 
-        for (Object slide : element) {
-            JSONObject jsonObject2 = (JSONObject) slide;
-            String id = (String) jsonObject2.get("id");
+            String id = (String) element.get("id");
 
-            if (id.contains(attribute) && jsonObject2.containsKey("binding")) {
-                JSONObject jsonObject3 = (JSONObject) jsonObject2.get("binding");
+            if (id.contains(attribute) && element.containsKey("binding")) {
+                JSONObject jsonObject3 = (JSONObject) element.get("binding");
                 String valueset_link = (String) jsonObject3.get("valueSet");
                 //valueset.add(valueset_link);
                 //grab table content from the link
@@ -119,7 +114,6 @@ public class ImplementationGuide {
 
                 return valueset;
             }
-        }
         return valueset;
     }
 

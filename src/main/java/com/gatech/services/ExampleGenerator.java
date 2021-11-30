@@ -32,7 +32,7 @@ public class ExampleGenerator {
             if(resourceAndJSON.get(resourceType) == null){
                 String fullUrl = String.format("urn:uuid:%s", UUID.randomUUID());
                 JSONObject request = (JSONObject) parser.parse(String.format("{\"method\": \"POST\",\"url\": \"%s\"}", resourceType));
-                JSONObject generatedData = generateDataForProfile(profile);
+                JSONObject generatedData = generateDataForProfile(data);
                 JSONObject finalData = new JSONObject();
                 finalData.put("fullUrl", fullUrl);
                 finalData.put("resource", generatedData);
@@ -50,9 +50,8 @@ public class ExampleGenerator {
         System.out.println(example);
     }
 
-    public JSONObject generateDataForProfile(File profileName) throws IOException {
+    public JSONObject generateDataForProfile(JSONObject data) throws IOException {
         ImplementationGuide implementationGuide = new ImplementationGuide();
-        JSONObject data = implementationGuide.readImplementationGuide(profileName.getAbsolutePath());
         JSONObject snapshot = (JSONObject) data.get("snapshot");
         JSONArray element = (JSONArray) snapshot.get("element");
         List<String> allAttributesOnImpGuide = implementationGuide.findAllElements(element);
@@ -63,6 +62,20 @@ public class ExampleGenerator {
         Boolean trigger=false;
         List<String> attributes=new ArrayList<String>();
 
+        Map<String, JSONObject> attributeElement = new HashMap<>();
+
+        for (String attribute:allAttributesOnImpGuide) {
+            for (Object slide : element) {
+                JSONObject jsonObject2 = (JSONObject) slide;
+                String id = (String) jsonObject2.get("id");
+
+                if (id.contains(attribute)) {
+                    attributeElement.put(attribute, jsonObject2);
+                    break;
+                }
+            }
+        }
+
         for(int i = 0; i<allAttributesOnImpGuide.size()-1; i++){
             String attr=allAttributesOnImpGuide.get(i);
             String next=allAttributesOnImpGuide.get(i+1);
@@ -72,23 +85,23 @@ public class ExampleGenerator {
                 attributes.add(attr);
                 if (!attrs[0].equals(nexts[0])){
                     trigger=false;
-                    data = generator.generateComplex(attributes,profileName.getAbsolutePath());
+                    data = generator.generateComplex(attributes, attributeElement);
                     generatedData.put(attr, data.get(attr));
                     attributes=new ArrayList<String>();
                     if (i==allAttributesOnImpGuide.size()-1){
-                        data = generator.generate(next, profileName.getAbsolutePath());
+                        data = generator.generate(next, attributeElement.get(next));
                         generatedData.put(attr, data.get(attr));
                     }
                 }else if (i==allAttributesOnImpGuide.size()-1){
                     attributes.add(next);
-                    data = generator.generateComplex(attributes,profileName.getAbsolutePath());
+                    data = generator.generateComplex(attributes, attributeElement);
                     generatedData.put(attr, data.get(attr));
                 }
             }else{
                 if (next.contains(attr) ){
                     trigger=true;
                 }else{
-                    data = generator.generate(attr, profileName.getAbsolutePath());
+                    data = generator.generate(attr, attributeElement.get(attr));
                     generatedData.put(attr, data.get(attr));
                 }
             }
