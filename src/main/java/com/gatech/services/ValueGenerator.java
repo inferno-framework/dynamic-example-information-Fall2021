@@ -36,8 +36,22 @@ public class ValueGenerator {
             String type = findType(attribute, element);
             ImplementationGuide implementationGuide = new ImplementationGuide();
             List<String> code_values = implementationGuide.findValuesInCode(attribute, element);
-            if (code_values.size() != 0) {
-                item.put(attr, code_values.get(0));
+            if (code_values.size() != 0 ) {
+                if (!primitiveType.containsKey(type)){
+                    String[] temp = attr.split("\\:");
+                    JSONObject child = new JSONObject();
+                    JSONArray childs = new JSONArray();
+                    JSONObject child2 = new JSONObject();
+                    child2.put("system","http://terminology.hl7.org/CodeSystem/"+temp[temp.length-1]);
+                    child2.put("code",code_values.get(0));
+                    childs.add(child2);
+                    child.put("coding",childs);
+
+                    item.put(temp[temp.length-1], child);
+                }else{
+                    String[] temp = attr.split("\\:");
+                    item.put(temp[temp.length-1], code_values.get(0));
+                }
             } else {
                 if (primitiveType.containsKey(type)) {
                     String value = primitiveType.get(type);
