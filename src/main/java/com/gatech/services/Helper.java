@@ -2,6 +2,7 @@ package com.gatech.services;
 
 import com.gatech.services.parser.ImplementationGuide;
 import com.gatech.services.parser.Synthea;
+import com.google.common.collect.Multimap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -29,22 +30,22 @@ public class Helper {
 
         // Get resource and it's json object from Synthea
         Synthea synthea = new Synthea();
-        Map<String, JSONObject> resourceAndJSON = synthea.findAttributeOnSynthea();
+        Multimap<String, JSONObject> resourceAndJSON = synthea.findAttributeOnSynthea();
 
         return compareImpGuideAndSynthea(profileName, allAttributesOnImpGuide, resourceAndJSON);
 
     }
 
-    public static Map<String, List<String>> compareImpGuideAndSynthea(String profileName, List<String> allAttributesOnImpGuide, Map<String, JSONObject> resourceAndJSON) {
+    public static Map<String, List<String>> compareImpGuideAndSynthea(String profileName, List<String> allAttributesOnImpGuide, Multimap<String, JSONObject> resourceAndJSON) {
 
         Map<String, List<String>> missingAttributeOnSynthea = new HashMap<>();
         List<String> missingAttributes = new ArrayList<>();
-        for (Map.Entry<String, JSONObject> entry : resourceAndJSON.entrySet()) {
+        for (Map.Entry<String, Collection<JSONObject>> entry : resourceAndJSON.asMap().entrySet()) {
             String key = entry.getKey();
             if (key.equals(profileName)) {
-                JSONObject syntheaKeyJSONObj = entry.getValue();
+                Collection<JSONObject> syntheaKeyJSONObj = entry.getValue();
                 for (String impAttr : allAttributesOnImpGuide) {
-                    if (!syntheaKeyJSONObj.containsKey(impAttr)) {
+                    if (!syntheaKeyJSONObj.contains(impAttr)) {
                         missingAttributes.add(impAttr);
                     }
                 }
