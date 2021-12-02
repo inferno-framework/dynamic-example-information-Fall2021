@@ -74,18 +74,17 @@ public class ImplementationGuideTest {
         System.out.println(generator.generate("category", attributeElement1.get("category")));
         System.out.println(implementationGuide.findAllElements(element));
 
-        //System.out.println(m);
         //List<String> test= (List<String>) m.values().toArray()[0];
         //int index=test.indexOf("address.id");
         //System.out.println(test.subList(index,index+12));
         //System.out.println(generator.generateComplex(test.subList(index,index+12),"us-core-patient.json"));
         ExampleGenerator exampleGenerator = new ExampleGenerator();
-        System.out.println("Generated Data for us-core Implementation Guide");
-        exampleGenerator.generate("us-core");
+        /*System.out.println("Generated Data for us-core Implementation Guide");
+        exampleGenerator.generate("us-core");*/
         System.out.println("Generated Data for qi-core Implementation Guide");
         exampleGenerator.generate("qi-core");
-        System.out.println("Generated Data for ips Implementation Guide");
-        exampleGenerator.generate("ips");
+        /*System.out.println("Generated Data for ips Implementation Guide");
+        exampleGenerator.generate("ips");*/
 
 
     }
