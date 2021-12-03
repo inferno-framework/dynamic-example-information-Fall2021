@@ -55,4 +55,4 @@ docker-compose ps
 ```
 
 ### **3. Architecture Diagram**
-![alt text](images/ArchitectureDiagram.png)
+![alt text](images/ArchDiagram.png)
