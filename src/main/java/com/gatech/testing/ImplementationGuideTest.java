@@ -74,7 +74,6 @@ public class ImplementationGuideTest {
         System.out.println(generator.generate("category", attributeElement1.get("category")));
         System.out.println(implementationGuide.findAllElements(element));
 
-        //System.out.println(m);
         //List<String> test= (List<String>) m.values().toArray()[0];
         //int index=test.indexOf("address.id");
         //System.out.println(test.subList(index,index+12));

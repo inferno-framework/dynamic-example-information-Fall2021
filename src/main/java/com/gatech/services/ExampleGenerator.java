@@ -140,23 +140,36 @@ public class ExampleGenerator {
                 if (!attrs[0].equals(nexts[0])){
                     trigger=false;
                     data = generator.generateComplex(attributes, attributeElement);
-                    generatedData.put(attr, data.get(attr));
+                    String[] temp = attr.split("\\:");
+                    generatedData.put(temp[temp.length-1], data.get(temp[temp.length-1]));
                     attributes=new ArrayList<String>();
                     if (i==attributesToBeGenerated.size()-1){
                         data = generator.generate(next, attributeElement.get(next));
-                        generatedData.put(attr, data.get(attr));
+                        String[] temp1 = attr.split("\\:");
+                        generatedData.put(temp[temp.length-1], data.get(temp[temp.length-1]));
                     }
                 }else if (i==attributesToBeGenerated.size()-1){
                     attributes.add(next);
                     data = generator.generateComplex(attributes, attributeElement);
-                    generatedData.put(attr, data.get(attr));
+                    String[] temp = attr.split("\\:");
+                    generatedData.put(temp[temp.length-1], data.get(temp[temp.length-1]));
                 }
             }else{
                 if (next.contains(attr) ){
                     trigger=true;
                 }else{
-                    data = generator.generate(attr, attributeElement.get(attr));
-                    generatedData.put(attr, data.get(attr));
+                    String[] temp = attr.split("\\:");
+                    if (attr.contains(".")){
+                        List<String> temp2=new ArrayList<String>();
+                        temp2.add(attr);
+                        data = generator.generateComplex(temp2, attributeElement);
+                        generatedData.put(temp[temp.length-1].split("\\.")[0], data.get(temp[temp.length-1].split("\\.")[0]));
+                    }else{
+                        data = generator.generate(attr, attributeElement.get(attr));
+                        generatedData.put(temp[temp.length-1], data.get(temp[temp.length-1]));
+                    }
+
+
                 }
             }
         }

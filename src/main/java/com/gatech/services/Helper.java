@@ -61,7 +61,7 @@ public class Helper {
         List<String> impGuideList = getAllImplementationGuideName();
         List<String> profileList = new ArrayList<>();
         for (String impGuideName : impGuideList) {
-            if (impGuideName.equals(mainDirectoryPath + implementationGuide)) {
+            if (impGuideName.equals(implementationGuide)) {
                 File folder = new File(mainDirectoryPath + implementationGuide);
                 File[] listOfFiles = folder.listFiles();
                 for (int i = 0; i < listOfFiles.length; i++) {
