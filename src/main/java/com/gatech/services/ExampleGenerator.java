@@ -14,7 +14,7 @@ import java.util.*;
 
 public class ExampleGenerator {
 
-    public void generate(String ig) throws IOException, ParseException {
+    public JSONObject generate(String ig) throws IOException, ParseException {
 
         ImplementationGuide implementationGuide = new ImplementationGuide();
 
@@ -51,7 +51,8 @@ public class ExampleGenerator {
         example.put("entry", items);
         example.put("type", "transaction");
         example.put("resourceType", "Bundle");
-        System.out.println(example);
+
+        return example;
     }
 
     public JSONObject generateDataForProfile(JSONObject data) throws IOException {

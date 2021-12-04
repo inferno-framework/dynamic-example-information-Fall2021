@@ -16,16 +16,6 @@ import java.util.List;
 public class FHIRApplication {
 
     public static void main(String[] args) throws IOException, ParseException {
-        //SpringApplication.run(FHIRApplication.class, args);
-
-          ImplementationGuideTest testImpGuide = new ImplementationGuideTest();
-          testImpGuide.testFunctionality();
-        //testImpGuide.testFindAllAttributeInIMPGuide();
-
-//        Synthea syntheaTest = new Synthea();
-//        syntheaTest.findAttributeOnSynthea();
-
-        //Helper helper = new Helper();
-        //helper.findMissingAttributeByProfile();
+        SpringApplication.run(FHIRApplication.class, args);
     }
 }
