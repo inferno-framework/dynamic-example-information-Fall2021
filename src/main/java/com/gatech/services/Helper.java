@@ -17,7 +17,7 @@ public class Helper {
 
     public Helper() {}
 
-    public Map<String, List<String>> findMissingAttributeByProfile(String filepath) {
+    public static Map<String, List<String>> findMissingAttributeByProfile(String filepath) {
         // Get all attribute from implementation
         ImplementationGuide implementationGuide = new ImplementationGuide();
         JSONObject data = implementationGuide.readImplementationGuide(filepath);
