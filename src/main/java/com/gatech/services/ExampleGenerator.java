@@ -15,7 +15,7 @@ import java.util.*;
 
 public class ExampleGenerator {
 
-    public JSONObject generate(String ig) throws IOException, ParseException {
+    public JSONObject generate(String ig, Boolean mustSupport, Boolean allFields) throws IOException, ParseException {
 
         ImplementationGuide implementationGuide = new ImplementationGuide();
 
@@ -32,17 +32,16 @@ public class ExampleGenerator {
         JSONObject generatedData = new JSONObject();
 
         Map<String, JSONObject> attributeElement = new HashMap<>();
-
         for(File profile : files != null ? files : new File[0]){
             JSONObject data = implementationGuide.readImplementationGuide(profile.getAbsolutePath());
             String resourceType = implementationGuide.findResourceType(data);
             JSONObject snapshot = (JSONObject) data.get("snapshot");
             JSONArray element = (JSONArray) snapshot.get("element");
-            List<String> allAttributesOnImpGuide = implementationGuide.findAllElements(element);
+            List<String> allAttributesOnImpGuide = implementationGuide.findAllElements(element, mustSupport, allFields);
             if(resourceAndJSON.get(resourceType).isEmpty()){
                 String fullUrl = String.format("urn:uuid:%s", UUID.randomUUID());
                 JSONObject request = (JSONObject) parser.parse(String.format("{\"method\": \"POST\",\"url\": \"%s\"}", resourceType));
-                generatedData = generateDataForProfile(data);
+                generatedData = generateDataForProfile(data, mustSupport, allFields);
                 JSONObject finalData = new JSONObject();
                 finalData.put("fullUrl", fullUrl);
                 finalData.put("resource", generatedData);
@@ -51,7 +50,7 @@ public class ExampleGenerator {
             }
             else if (keysFetchedFromSynthea.contains(resourceType));
             else{
-                Map<String, List<String>> missingAttributeByProfile = Helper.findMissingAttributeByProfile(profile.getAbsolutePath());
+                Map<String, List<String>> missingAttributeByProfile = Helper.findMissingAttributeByProfile(element, data, mustSupport, allFields);
                 List<String> missingAttributesOnSynthea = new ArrayList<String>(missingAttributeByProfile.get(resourceType));
                 for (String attribute:allAttributesOnImpGuide) {
                     for (Object slide : element) {
@@ -80,7 +79,10 @@ public class ExampleGenerator {
                         finalData.put("fullUrl", fullUrl);
                     }
                     finalData.put("resource", finalResource);
-                    finalData.put("request", eachSyntheaData.get("request"));
+                    Object request = eachSyntheaData.get("request");
+                    if(request != null) {
+                        finalData.put("request", request);
+                    }
                     items.add(finalData);
                 }
                 items.addAll(resourceAndJSON.get(resourceType));
@@ -94,11 +96,11 @@ public class ExampleGenerator {
         return example;
     }
 
-    public JSONObject generateDataForProfile(JSONObject data) throws IOException {
+    public JSONObject generateDataForProfile(JSONObject data, Boolean mustSupport, Boolean allFields) throws IOException {
         ImplementationGuide implementationGuide = new ImplementationGuide();
         JSONObject snapshot = (JSONObject) data.get("snapshot");
         JSONArray element = (JSONArray) snapshot.get("element");
-        List<String> allAttributesOnImpGuide = implementationGuide.findAllElements(element);
+        List<String> allAttributesOnImpGuide = implementationGuide.findAllElements(element, mustSupport, allFields);
         ValueGenerator generator=new ValueGenerator();
 
         JSONObject generatedData = new JSONObject();
@@ -168,7 +170,6 @@ public class ExampleGenerator {
                         data = generator.generate(attr, attributeElement.get(attr));
                         generatedData.put(temp[temp.length-1], data.get(temp[temp.length-1]));
                     }
-
 
                 }
             }

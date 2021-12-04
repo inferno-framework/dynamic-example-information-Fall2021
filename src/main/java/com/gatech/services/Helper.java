@@ -3,6 +3,7 @@ package com.gatech.services;
 import com.gatech.services.parser.ImplementationGuide;
 import com.gatech.services.parser.Synthea;
 import com.google.common.collect.Multimap;
+import com.google.gson.Gson;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -17,14 +18,10 @@ public class Helper {
 
     public Helper() {}
 
-    public static Map<String, List<String>> findMissingAttributeByProfile(String filepath) {
+    public static Map<String, List<String>> findMissingAttributeByProfile(JSONArray element, JSONObject data, Boolean mustSupport, Boolean allFields) {
         // Get all attribute from implementation
         ImplementationGuide implementationGuide = new ImplementationGuide();
-        JSONObject data = implementationGuide.readImplementationGuide(filepath);
-        JSONObject snapshot = (JSONObject) data.get("snapshot");
-        JSONArray element = (JSONArray) snapshot.get("element");
-
-        List<String> allAttributesOnImpGuide = implementationGuide.findAllElements(element);
+        List<String> allAttributesOnImpGuide = implementationGuide.findAllElements(element, mustSupport, allFields);
 
         String profileName = implementationGuide.findResourceType(data);
 
@@ -44,8 +41,12 @@ public class Helper {
             String key = entry.getKey();
             if (key.equals(profileName)) {
                 Collection<JSONObject> syntheaKeyJSONObj = entry.getValue();
+                Object resource = new JSONObject();
+                for (JSONObject eachSyntheaData : syntheaKeyJSONObj){
+                    resource = eachSyntheaData.get("resource");
+                }
                 for (String impAttr : allAttributesOnImpGuide) {
-                    if (!syntheaKeyJSONObj.contains(impAttr)) {
+                    if (!resource.toString().contains(impAttr)) {
                         missingAttributes.add(impAttr);
                     }
                 }
