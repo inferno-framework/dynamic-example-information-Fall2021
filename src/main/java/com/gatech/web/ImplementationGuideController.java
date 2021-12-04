@@ -39,7 +39,7 @@ public class ImplementationGuideController {
     @ResponseBody
     public Serializable getExampleDataByImplementationGuide(@PathVariable("impGuideName") String impGuide) throws IOException, ParseException {
         ExampleGenerator exampleGenerator = new ExampleGenerator();
-        JSONObject returnedData = exampleGenerator.generate(impGuide);
+        JSONObject returnedData = exampleGenerator.generate(impGuide, false, false);
         return Objects.requireNonNullElse(returnedData, "The implementation guide you pass is not supported at the moment");
     }
 }
