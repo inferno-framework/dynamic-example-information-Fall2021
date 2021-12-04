@@ -49,8 +49,8 @@ public class ImplementationGuideTest {
         System.out.println(implementationGuide.findResourceType(data));*/
         ValueGenerator generator=new ValueGenerator();
         Helper h=new Helper();
-        Map<String, List<String>> m=h.findMissingAttributeByProfile("src/main/java/com/gatech/data/implementationGuide/us-core/us-core-patient.json");
-        System.out.println(generator.generate("address.city", attributeElement.get("address.city")));
+        Map<String, List<String>> m=h.findMissingAttributeByProfile(element, data, false, false);
+        System.out.println(generator.generate("gender", attributeElement.get("gender")));
 
         final JSONObject data1 = implementationGuide.readImplementationGuide("src/main/java/com/gatech/data/implementationGuide/us-core/us-core-condition.json");
 
@@ -79,13 +79,11 @@ public class ImplementationGuideTest {
         //System.out.println(test.subList(index,index+12));
         //System.out.println(generator.generateComplex(test.subList(index,index+12),"us-core-patient.json"));
         ExampleGenerator exampleGenerator = new ExampleGenerator();
-        /*System.out.println("Generated Data for us-core Implementation Guide");
-        exampleGenerator.generate("us-core");*/
+        System.out.println("Generated Data for us-core Implementation Guide");
+        System.out.println(exampleGenerator.generate("us-core", false, false));
         System.out.println("Generated Data for qi-core Implementation Guide");
-        exampleGenerator.generate("qi-core");
-        /*System.out.println("Generated Data for ips Implementation Guide");
-        exampleGenerator.generate("ips");*/
-
-
+        System.out.println(exampleGenerator.generate("qi-core", false, true));
+        System.out.println("Generated Data for ips Implementation Guide");
+        System.out.println(exampleGenerator.generate("ips", false, false));
     }
 }
