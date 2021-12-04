@@ -35,11 +35,28 @@ public class ImplementationGuideController {
         }
     }
 
-    @GetMapping( "/implementationGuide/{impGuideName}/data")
+    @GetMapping( "/implementationGuide/{impGuideName}/{data}")
     @ResponseBody
-    public Serializable getExampleDataByImplementationGuide(@PathVariable("impGuideName") String impGuide) throws IOException, ParseException {
+    public Serializable getExampleDataByImplementationGuideAllFields(
+            @PathVariable("impGuideName") String impGuide,
+            @PathVariable("data") String data,
+            @RequestParam(value = "mustSupport", required = false) Boolean mustSupport,
+            @RequestParam(value = "allFields", required = false) Boolean allFields
+    )
+            throws IOException, ParseException {
         ExampleGenerator exampleGenerator = new ExampleGenerator();
-        JSONObject returnedData = exampleGenerator.generate(impGuide, false, false);
+        Boolean allFieldFlag = false;
+        Boolean mustSupportFlag = false;
+
+        if (allFields != null && mustSupport != null) {
+            allFieldFlag = true;
+            mustSupportFlag = true;
+        } else if (allFields != null) {
+            allFieldFlag = true;
+        } else if (mustSupport != null) {
+            mustSupportFlag = true;
+        }
+        JSONObject returnedData = exampleGenerator.generate(impGuide, mustSupportFlag, allFieldFlag);
         return Objects.requireNonNullElse(returnedData, "The implementation guide you pass is not supported at the moment");
     }
 }
