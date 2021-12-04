@@ -9,13 +9,14 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ExampleGenerator {
 
     public void generate(String ig) throws IOException, ParseException {
-
         ImplementationGuide implementationGuide = new ImplementationGuide();
 
         Synthea synthea = new Synthea();
@@ -51,6 +52,16 @@ public class ExampleGenerator {
         example.put("entry", items);
         example.put("type", "transaction");
         example.put("resourceType", "Bundle");
+
+        // writing the JSONObject into a file
+        try {
+            String timeStamp = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());
+            FileWriter fileWriter = new FileWriter("src/main/java/com/gatech/data/generatedExample/"+ig+" "+timeStamp+".json");
+            fileWriter.write(example.toJSONString());
+            fileWriter.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         System.out.println(example);
     }
 
@@ -62,7 +73,6 @@ public class ExampleGenerator {
         ValueGenerator generator=new ValueGenerator();
 
         JSONObject generatedData = new JSONObject();
-
         Boolean trigger=false;
         List<String> attributes=new ArrayList<String>();
 
