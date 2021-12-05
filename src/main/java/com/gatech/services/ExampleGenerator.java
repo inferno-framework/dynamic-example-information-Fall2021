@@ -1,8 +1,11 @@
 package com.gatech.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gatech.services.parser.ImplementationGuide;
 import com.gatech.services.parser.Synthea;
 import com.google.common.collect.Multimap;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -11,6 +14,9 @@ import org.json.simple.parser.ParseException;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -53,16 +59,18 @@ public class ExampleGenerator {
         example.put("type", "transaction");
         example.put("resourceType", "Bundle");
 
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String prettyJson=gson.toJson(example);
         // writing the JSONObject into a file
         try {
             String timeStamp = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());
             FileWriter fileWriter = new FileWriter("src/main/java/com/gatech/data/generatedExample/"+ig+" "+timeStamp+".json");
-            fileWriter.write(example.toJSONString());
+            fileWriter.write(prettyJson);
             fileWriter.flush();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println(example);
+        System.out.println(prettyJson);
     }
 
     public JSONObject generateDataForProfile(JSONObject data) throws IOException {
