@@ -118,13 +118,8 @@ public class ImplementationGuide {
     }
 
 
-    // TODO: Find which resource does the implementation guide
-    // NOTES: This can be found using  "kind" value and under the snapshot block.
-    // This resource will be used to dynamically create the API and render the data
-
     public String findResourceType(JSONObject impGuideJson) {
         String kind = (String) impGuideJson.get("type");
-//        System.out.println("The resource is " + kind);
         return kind;
     }
 
