@@ -118,30 +118,31 @@ public class ImplementationGuide {
     }
 
 
-    // TODO: Find which resource does the implementation guide
-    // NOTES: This can be found using  "kind" value and under the snapshot block.
-    // This resource will be used to dynamically create the API and render the data
-
     public String findResourceType(JSONObject impGuideJson) {
         String kind = (String) impGuideJson.get("type");
-//        System.out.println("The resource is " + kind);
         return kind;
     }
 
     // Method overloaded for findAllElements to add default values to parameters.
     public List<String> findAllElements(JSONArray impGuideJson) {
-        return findAllElements(impGuideJson, false);
+        return findAllElements(impGuideJson, false, false);
     }
 
     // Parse all the attribute from implementation guide
-    public List<String> findAllElements(JSONArray impGuideJson, Boolean mustSupport) {
+    public List<String> findAllElements(JSONArray impGuideJson, Boolean mustSupport, Boolean allFields) {
         List<String> attributes = new ArrayList<>();
         for (Object element : impGuideJson) {
             JSONObject jsonObject2 = (JSONObject) element;
             String id = (String) jsonObject2.get("id");
             long mustHaveValue = (long) jsonObject2.get("min");
             Boolean mustSupportValue = (Boolean) jsonObject2.get("mustSupport");
-            if ((mustHaveValue > 0 ) || (mustSupport && mustSupportValue != null && mustSupportValue)){
+            if (allFields){
+                String attr = findAttributes(id);
+                if (attr != null) {
+                    attributes.add(attr);
+                }
+            }
+            else if ((mustHaveValue > 0 ) || (mustSupport && mustSupportValue != null && mustSupportValue)){
                 String attr = findAttributes(id);
                 if (attr != null) {
                     attributes.add(attr);
